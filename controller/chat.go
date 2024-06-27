@@ -28,8 +28,8 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 	client := resty.New()
 
     // Hugging Face API URL dan token
-    apiUrl := "https://api-inference.huggingface.co/models/dimasardnt/barokah-model"
-    apiToken := "Bearer " + "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"
+    apiUrl := "anu"
+    apiToken := "Bearer " + "ini"
 
 	response, err := client.R().
             SetHeader("Authorization", apiToken).
