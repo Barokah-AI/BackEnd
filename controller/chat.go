@@ -5,21 +5,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"sort"
 
-	"github.com/Barokah-AI/BackEnd/config"
 	"github.com/Barokah-AI/BackEnd/helper"
 	"github.com/Barokah-AI/BackEnd/model"
 	"github.com/go-resty/resty/v2"
 )
 
-// Struct untuk hasil prediksi
-type Prediction struct {
-	Label string  `json:"label"`
-	Score float64 `json:"score"`
-}
-
-func Chat(respw http.ResponseWriter, req *http.Request) {
+func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 	var chat model.AIRequest
 
 	err := json.NewDecoder(req.Body).Decode(&chat)
@@ -37,7 +29,7 @@ func Chat(respw http.ResponseWriter, req *http.Request) {
 
 	// Hugging Face API URL dan token
 	apiUrl := "https://api-inference.huggingface.co/models/dimasardnt/barokah-model"
-	apiToken := "Bearer " + config.GetEnv("TOKENMODEL")
+	apiToken := "Bearer " + "tokenmodel"
 
 	response, err := client.R().
 		SetHeader("Authorization", apiToken).
@@ -49,24 +41,18 @@ func Chat(respw http.ResponseWriter, req *http.Request) {
 		log.Fatalf("Error making request: %v", err)
 	}
 
-	var predictions [][]Prediction
+	var data []map[string]string
 
-	err = json.Unmarshal(response.Body(), &predictions)
+	err = json.Unmarshal([]byte(response.String()), &data)
 	if err != nil {
 		fmt.Println("Response:", response.String())
+		fmt.Println("token", tokenmodel)
 		fmt.Println("Error decoding JSON:", err)
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : response")
 		return
 	}
 
-	if len(predictions) > 0 && len(predictions[0]) > 0 {
-		// Sort predictions by score in descending order
-		sort.Slice(predictions[0], func(i, j int) bool {
-			return predictions[0][i].Score > predictions[0][j].Score
-		})
-
-		// Send the top prediction
-		helper.WriteJSON(respw, http.StatusOK, predictions[0][0])
+	if len(data) > 0 {
+		helper.WriteJSON(respw, http.StatusOK, data[0])
 	} else {
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : response")
 	}
