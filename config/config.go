@@ -1,29 +1,34 @@
 package config
 
 import (
-	"log"
+	// "log"
 	"os"
-
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
 )
 
-// LoadEnv loads the environment variables from a .env file
-func LoadEnv() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
+func GetEnv(envName string) string {
+	// envFile, _ := godotenv.Read("../.env")
+	// return envFile[envName]
+	return os.Getenv(envName)
 }
 
-// GetEnv gets the environment variable by name
-func GetEnv(envName string, defaultValue string) string {
-	value, exists := os.LookupEnv(envName)
-	if !exists {
-		return defaultValue
-	}
-	return value
-}
+// // LoadEnv loads the environment variables from a .env file
+// func LoadEnv() {
+// 	err := godotenv.Load()
+// 	if err != nil {
+// 		log.Fatalf("Error loading .env file")
+// 	}
+// }
 
-func init() {
-	LoadEnv()
-}
+// // GetEnv gets the environment variable by name
+// func GetEnv(envName string, defaultValue string) string {
+// 	value, exists := os.LookupEnv(envName)
+// 	if !exists {
+// 		return defaultValue
+// 	}
+// 	return value
+// }
+
+// func init() {
+// 	LoadEnv()
+// }

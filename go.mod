@@ -1,11 +1,11 @@
-module github.com/Barokah-AI/BackEnd
+module barokahai
 
 go 1.21.2
 
 require (
+	github.com/Barokah-AI/BackEnd v0.0.0-20240705145912-9586f20f72cd
 	github.com/GoogleCloudPlatform/functions-framework-go v1.8.1
 	github.com/go-resty/resty/v2 v2.13.1
-	github.com/joho/godotenv v1.5.1
 )
 
 require (
