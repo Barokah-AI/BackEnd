@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -120,7 +119,7 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
 	if bestLabel != "" {
 		// Load the dataset
-		datasetPath := filepath.Join("dataset", "questions.csv")
+		datasetPath := ("../dataset/questions.csv")
 
 		// Load the dataset
 		labelToQA, err := LoadDataset(datasetPath)
