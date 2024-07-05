@@ -18,7 +18,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	case method == "GET" && path == "/":
 		Home(w, r)
 	case method == "POST" && path == "/chat":
-		controller.Chat(w, r, config.GetEnv("TOKENMODEL"))
+		controller.Chat(w, r, config.GetEnv("HUGGINGFACE_API_KEY", ""))
 	default:
 		helper.ErrorResponse(w, r, http.StatusNotFound, "Not Found", "The requested resource was not found")
 	}
@@ -27,7 +27,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 func Home(respw http.ResponseWriter, req *http.Request) {
 	resp := map[string]string{
 		"github_repo": "https://github.com/barokah-ai/backend",
-		"message": "InsyaAllah Berkah🫰",
+		"message": "Insyallah Berkah 🤞",
 	}
 	helper.WriteJSON(respw, http.StatusOK, resp)
 }
