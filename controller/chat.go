@@ -27,26 +27,26 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
 	client := resty.New()
 
-    // Hugging Face API URL dan token
-    apiUrl := "anu"
-    apiToken := "Bearer " + "ini"
+	// Hugging Face API URL dan token
+	apiUrl := "https://api-inference.huggingface.co/models/dimasardnt/barokah-model"
+	apiToken := "Bearer " + "tokenmodel"
 
 	response, err := client.R().
-            SetHeader("Authorization", apiToken).
-            SetHeader("Content-Type", "application/json").
-            SetBody(`{"inputs": "`+chat.Promt+`"}`).
-            Post(apiUrl)
+		SetHeader("Authorization", apiToken).
+		SetHeader("Content-Type", "application/json").
+		SetBody(`{"inputs": "` + chat.Promt + `"}`).
+		Post(apiUrl)
 
-        if err != nil {
-            log.Fatalf("Error making request: %v", err)
-        }
+	if err != nil {
+		log.Fatalf("Error making request: %v", err)
+	}
 
 	var data []map[string]string
 
 	err = json.Unmarshal([]byte(response.String()), &data)
 	if err != nil {
-        fmt.Println("Response:", response.String())
-        fmt.Println("token", tokenmodel)
+		fmt.Println("Response:", response.String())
+		fmt.Println("token", tokenmodel)
 		fmt.Println("Error decoding JSON:", err)
 		return
 	}
