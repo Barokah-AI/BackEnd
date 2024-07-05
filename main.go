@@ -1,12 +1,11 @@
 package main
 
 import (
-	"net/http"
-
 	routes "github.com/Barokah-AI/BackEnd/url"
+
+	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
 )
 
-func main() {
-	http.HandleFunc("/", routes.URL)
-	http.ListenAndServe(":8080", nil)
+func init() {
+	functions.HTTP("WebHook", routes.URL)
 }
