@@ -119,12 +119,8 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 	}
 
 	if bestLabel != "" {
-		// Determine the correct path to the dataset
-		workingDir, err := os.Getwd()
-		if err != nil {
-			log.Fatalf("Failed to get working directory: %v", err)
-		}
-		datasetPath := filepath.Join(workingDir, "dataset", "questions.csv")
+		// Load the dataset
+		datasetPath := filepath.Join("dataset", "questions.csv")
 
 		// Load the dataset
 		labelToQA, err := LoadDataset(datasetPath)
