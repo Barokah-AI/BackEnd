@@ -1,4 +1,4 @@
-module barokahai
+module github.com/barokah-ai/backend
 
 go 1.21.2
 
