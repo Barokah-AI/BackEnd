@@ -31,7 +31,7 @@ jobs:
         run: "gcloud info"
       - name: "Deploy a gen 2 cloud function"
         run: |
-          gcloud functions deploy teeamai \
+          gcloud functions deploy barokahai \
             --region=asia-southeast2 \
             --allow-unauthenticated \
             --entry-point=WebHook \
@@ -42,8 +42,8 @@ jobs:
             --set-env-vars=HUGGINGFACE_API_URL='${{ secrets.HUGGINGFACE_API_URL }}' \
             --set-env-vars=HUGGINGFACE_API_KEY='${{ secrets.HUGGINGFACE_API_KEY }}'
       - name: "Cek eksistensi fungsi"
-        run: "gcloud functions describe teeamai --region=asia-southeast2"
+        run: "gcloud functions describe barokahai --region=asia-southeast2"
       - name: "Cek log debugging"
-        run: "gcloud functions logs read teeamai --region=asia-southeast2"
+        run: "gcloud functions logs read barokahai --region=asia-southeast2"
       - name: "Cleaning Artifact Registry"
         run: "gcloud artifacts repositories delete gcf-artifacts --location=asia-southeast2 --quiet"
