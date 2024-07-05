@@ -58,7 +58,7 @@ func NormalizeText(text string) string {
 }
 
 // Chat is the controller for handling chat requests
-func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
+func Chat(respw http.ResponseWriter, req *http.Request, apiKey string) {
 	var chat model.AIRequest
 
 	err := json.NewDecoder(req.Body).Decode(&chat)
@@ -89,7 +89,7 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 	}
 
 	// Log response body
-	// log.Printf("Response from Hugging Face API: %s", response.String())
+	log.Printf("Response from Hugging Face API: %s", response.String())
 
 	// Handle the expected nested array structure
 	var nestedData [][]map[string]interface{}
@@ -118,7 +118,7 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 	}
 
 	if bestLabel != "" {
-		// Load the dataset
+		// Path relatif ke dataset
 		datasetPath := ("../dataset/questions.csv")
 
 		// Load the dataset
@@ -138,7 +138,7 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 		answer := record[1]
 
 		helper.WriteJSON(respw, http.StatusOK, map[string]string{
-			"prompt":    chat.Prompt,
+			"prompt":   chat.Prompt,
 			"response": answer,
 			"label":    bestLabel,
 			"score":    strconv.FormatFloat(highestScore, 'f', -1, 64),
