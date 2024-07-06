@@ -119,8 +119,12 @@ func Chat(respw http.ResponseWriter, req *http.Request, apiKey string) {
 
 	if bestLabel != "" {
 		// Path relatif ke dataset
-		datasetPath := ("../dataset/questions.csv")
+		// datasetPath := ("../dataset/questions.csv")
+		datasetPath := config.GetEnv("DATASET_PATH")
 
+		// Log path dataset untuk debugging
+        log.Printf("Dataset path from environment variable: %s", datasetPath)
+		
 		// Load the dataset
 		labelToQA, err := LoadDataset(datasetPath)
 		if err != nil {
