@@ -7,6 +7,7 @@ import (
 // Daftar origins yang diizinkan
 var Origins = []string{
 	"http://localhost:8080",
+	"http://localhost:5173",
 }
 
 // Fungsi untuk memeriksa apakah origin diizinkan
