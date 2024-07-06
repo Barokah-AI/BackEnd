@@ -39,10 +39,8 @@ jobs:
             --runtime=go122 \
             --trigger-http \
             --timeout=540s \
-            --source=. \
             --set-env-vars=HUGGINGFACE_API_URL='${{ secrets.HUGGINGFACE_API_URL }}' \
             --set-env-vars=HUGGINGFACE_API_KEY='${{ secrets.HUGGINGFACE_API_KEY }}' \
-            --set-env-vars=DATASET_PATH="/workspace/dataset/questions.csv"
       - name: "Cek eksistensi fungsi"
         run: "gcloud functions describe barokahai --region=asia-southeast2"
       - name: "Cek log debugging"
