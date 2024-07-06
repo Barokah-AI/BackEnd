@@ -41,6 +41,8 @@ jobs:
             --timeout=540s \
             --set-env-vars=HUGGINGFACE_API_URL='${{ secrets.HUGGINGFACE_API_URL }}' \
             --set-env-vars=HUGGINGFACE_API_KEY='${{ secrets.HUGGINGFACE_API_KEY }}' \
+            --set-env-vars=GCS_BUCKET_NAME='${{ secrets.GCS_BUCKET_NAME }}' \
+            --set-env-vars=GCS_OBJECT_NAME='${{ secrets.GCS_OBJECT_NAME }}'
       - name: "Cek eksistensi fungsi"
         run: "gcloud functions describe barokahai --region=asia-southeast2"
       - name: "Cek log debugging"
