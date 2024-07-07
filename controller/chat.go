@@ -85,6 +85,24 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
     // Log response body
     // log.Printf("Response from Hugging Face API: %s", response.String())
 
+    // Periksa jika model sedang dimuat
+	if response.StatusCode() == http.StatusServiceUnavailable {
+		helper.ErrorResponse(respw, req, http.StatusServiceUnavailable, "Internal Server Error", "Model sedang dimuat, coba lagi sebentar ya kakak 🙏 | HF Response: "+response.String())
+		return
+	}
+
+    // Periksa jika model tidak ditemukan
+    if response.StatusCode() == http.StatusNotFound {
+        helper.ErrorResponse(respw, req, http.StatusNotFound, "Not Found", "Model tidak ditemukan | HF Response: "+response.String())
+        return
+    }
+
+    // Periksa jika model mengembalikan status code lain
+    if response.StatusCode() != http.StatusOK {
+        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: "+response.String())
+        return
+    }
+
     // Handle the expected nested array structure
     var nestedData [][]map[string]interface{}
     err = json.Unmarshal([]byte(response.String()), &nestedData)
