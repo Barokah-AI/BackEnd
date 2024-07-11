@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/Barokah-AI/BackEnd/config"
-	"github.com/Barokah-AI/BackEnd/local/controller"
 	"github.com/Barokah-AI/BackEnd/helper"
+	"github.com/Barokah-AI/BackEnd/local/controller"
 )
 
 func URL(w http.ResponseWriter, r *http.Request) {
@@ -22,4 +22,12 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	default:
 		helper.ErrorResponse(w, r, http.StatusNotFound, "Not Found", "The requested resource was not found")
 	}
+}
+
+func Home(respw http.ResponseWriter, req *http.Request) {
+	resp := map[string]string{
+		"github_repo": "https://github.com/barokah-ai/backend",
+		"message": "Insyallah Berkah 🤞",
+	}
+	helper.WriteJSON(respw, http.StatusOK, resp)
 }
