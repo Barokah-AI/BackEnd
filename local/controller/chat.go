@@ -42,3 +42,18 @@ func LoadDataset(filePath string) (map[string][]string, error) {
 	}
 	return labelToQA, nil
 }
+
+// NormalizeText normalizes the text by converting to lowercase and removing punctuation
+func NormalizeText(text string) string {
+	// Convert to lowercase
+	text = strings.ToLower(text)
+	// Remove punctuation
+	text = strings.Map(func(r rune) rune {
+		if strings.ContainsRune("abcdefghijklmnopqrstuvwxyz0123456789 ", r) {
+			return r
+		}
+		return -1
+	}, text)
+	return text
+}
+
