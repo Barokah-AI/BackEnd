@@ -92,7 +92,7 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
     if bestLabel != "" {
         // Load the dataset from GCS
         bucketName := config.GetEnv("GCS_BUCKET_NAME")
-        objectName := config.GetEnv("GCS_DATASET")
+        objectName := config.GetEnv("GCS_DATASET_FILE")
 
         labelToQA, err := helper.LoadDatasetGCS(bucketName, objectName)
         if err != nil {
