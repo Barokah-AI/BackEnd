@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"cloud.google.com/go/storage"
 	"github.com/Barokah-AI/BackEnd/config"
@@ -159,3 +160,74 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
         helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : response")
     }
 }
+
+func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
+    var chat model.AIRequest
+
+    err := json.NewDecoder(req.Body).Decode(&chat)
+    if err != nil {
+        helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Tidak Valid", "error saat membaca isi permintaan: "+err.Error())
+        return
+    }
+
+    if chat.Prompt == "" {
+        helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Tidak Valid", "masukin pertanyaan dulu ya kakak 🤗")
+        return
+    }
+
+    // Read and use the tokenizer
+	vocab, err := readVocab("../helper/vocab.txt")
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak bisa membaca vocab: "+err.Error())
+		return
+	}
+
+	tokenizerConfig, err := readTokenizerConfig("../helper/tokenizer_config.json")
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak bisa membaca konfigurasi tokenizer: "+err.Error())
+		return
+	}
+
+	tokens, err := tokenize(chat.Prompt, vocab, tokenizerConfig)
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "error saat melakukan tokenisasi: "+err.Error())
+		return
+	}
+
+	// Convert tokens to string for API call
+	tokensStr := strings.Trim(strings.Join(strings.Fields(fmt.Sprint(tokens)), " "), "[]")
+
+	// Call Hugging Face API with tokenized prompt
+	label, score, err := helper.CallHuggingFaceAPI(tokensStr)
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "model sedang diload: "+err.Error())
+		return
+	}
+
+    // Load the dataset from GCS
+    bucketName := config.GetEnv("GCS_BUCKET_NAME")
+    objectName := config.GetEnv("GCS_OBJECT_NAME")
+
+    labelToQA, err := LoadDataset(bucketName, objectName)
+    if err != nil {
+        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: tidak bisa memuat dataset: "+err.Error())
+        return
+    }
+
+    // Get the answer corresponding to the best label
+    record, ok := labelToQA[label]
+    if !ok {
+        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: label tidak ditemukan dalam dataset")
+        return
+    }
+
+    answer := record[1]
+
+    helper.WriteJSON(respw, http.StatusOK, map[string]string{
+        "prompt":   chat.Prompt,
+        "response": answer,
+        "label":    label,
+        "score":    strconv.FormatFloat(score, 'f', -1, 64),
+    })
+}
+
