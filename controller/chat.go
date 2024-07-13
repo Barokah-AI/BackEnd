@@ -1,57 +1,16 @@
 package controller
 
 import (
-	"context"
-	"encoding/csv"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
-	"strings"
 
-	"cloud.google.com/go/storage"
 	"github.com/Barokah-AI/BackEnd/config"
 	"github.com/Barokah-AI/BackEnd/helper"
 	"github.com/Barokah-AI/BackEnd/model"
 	"github.com/go-resty/resty/v2"
 )
-
-// LoadDataset loads the dataset from GCS bucket and returns a map of label to question-answer pair
-func LoadDataset(bucketName, objectName string) (map[string][]string, error) {
-    ctx := context.Background()
-    client, err := storage.NewClient(ctx)
-    if err != nil {
-        return nil, fmt.Errorf("failed to create storage client: %v", err)
-    }
-    defer client.Close()
-
-    bucket := client.Bucket(bucketName)
-    object := bucket.Object(objectName)
-    r, err := object.NewReader(ctx)
-    if err != nil {
-        return nil, fmt.Errorf("failed to create reader for object: %v", err)
-    }
-    defer r.Close()
-
-    reader := csv.NewReader(r)
-    reader.Comma = '|' // Set the delimiter to pipe
-    records, err := reader.ReadAll()
-    if err != nil {
-        return nil, fmt.Errorf("failed to read dataset file: %v", err)
-    }
-
-    labelToQA := make(map[string][]string)
-    for i, record := range records {
-        if len(record) != 2 {
-            log.Printf("Skipping invalid record at line %d: %v\n", i+1, record)
-            continue
-        }
-        label := "LABEL_" + strconv.Itoa(i)
-        labelToQA[label] = record
-    }
-    return labelToQA, nil
-}
 
 func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
     var chat model.AIRequest
@@ -133,9 +92,9 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
     if bestLabel != "" {
         // Load the dataset from GCS
         bucketName := config.GetEnv("GCS_BUCKET_NAME")
-        objectName := config.GetEnv("GCS_OBJECT_NAME")
+        objectName := config.GetEnv("GCS_DATASET")
 
-        labelToQA, err := LoadDataset(bucketName, objectName)
+        labelToQA, err := helper.LoadDatasetGCS(bucketName, objectName)
         if err != nil {
             helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "server error: could not load dataset: "+err.Error())
             return
@@ -159,75 +118,5 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
     } else {
         helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : response")
     }
-}
-
-func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
-    var chat model.AIRequest
-
-    err := json.NewDecoder(req.Body).Decode(&chat)
-    if err != nil {
-        helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Tidak Valid", "error saat membaca isi permintaan: "+err.Error())
-        return
-    }
-
-    if chat.Prompt == "" {
-        helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Tidak Valid", "masukin pertanyaan dulu ya kakak 🤗")
-        return
-    }
-
-    // Read and use the tokenizer
-	vocab, err := readVocab("../helper/vocab.txt")
-	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak bisa membaca vocab: "+err.Error())
-		return
-	}
-
-	tokenizerConfig, err := readTokenizerConfig("../helper/tokenizer_config.json")
-	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak bisa membaca konfigurasi tokenizer: "+err.Error())
-		return
-	}
-
-	tokens, err := tokenize(chat.Prompt, vocab, tokenizerConfig)
-	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "error saat melakukan tokenisasi: "+err.Error())
-		return
-	}
-
-	// Convert tokens to string for API call
-	tokensStr := strings.Trim(strings.Join(strings.Fields(fmt.Sprint(tokens)), " "), "[]")
-
-	// Call Hugging Face API with tokenized prompt
-	label, score, err := helper.CallHuggingFaceAPI(tokensStr)
-	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "model sedang diload: "+err.Error())
-		return
-	}
-
-    // Load the dataset from GCS
-    bucketName := config.GetEnv("GCS_BUCKET_NAME")
-    objectName := config.GetEnv("GCS_OBJECT_NAME")
-
-    labelToQA, err := LoadDataset(bucketName, objectName)
-    if err != nil {
-        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: tidak bisa memuat dataset: "+err.Error())
-        return
-    }
-
-    // Get the answer corresponding to the best label
-    record, ok := labelToQA[label]
-    if !ok {
-        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: label tidak ditemukan dalam dataset")
-        return
-    }
-
-    answer := record[1]
-
-    helper.WriteJSON(respw, http.StatusOK, map[string]string{
-        "prompt":   chat.Prompt,
-        "response": answer,
-        "label":    label,
-        "score":    strconv.FormatFloat(score, 'f', -1, 64),
-    })
 }
 
