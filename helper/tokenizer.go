@@ -2,33 +2,34 @@ package helper
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
 	"strings"
-	"bytes"
 
 	"github.com/Barokah-AI/BackEnd/model"
-
 )
 
 // Fungsi untuk membaca vocab dari GCS
-func ReadVocabFromGCS(bucketName, fileName string) (map[string]string, error) {
+func ReadVocabFromGCS(bucketName, fileName string) (map[string]int, error) {
 	data, err := ReadFileFromGCS(bucketName, fileName)
 	if err != nil {
 		return nil, err
 	}
 
-	vocab := make(map[string]string)
+	vocab := make(map[string]int)
 	scanner := bufio.NewScanner(bytes.NewReader(data))
+	index := 0
 	for scanner.Scan() {
 		line := scanner.Text()
-		parts := strings.Fields(line)
-		if len(parts) != 2 {
+		token := strings.TrimSpace(line)
+		if token == "" {
 			return nil, fmt.Errorf("invalid line in vocab file: %s", line)
 		}
-		vocab[parts[0]] = parts[1]
+		vocab[token] = index
+		index++
 	}
 	if err := scanner.Err(); err != nil {
 		return nil, fmt.Errorf("error reading vocab file: %v", err)
@@ -132,11 +133,11 @@ func Tokenize(text string, vocab map[string]int, config *model.TokenizerConfig) 
 	return tokens, nil
 }
 
-func Tokenize2(text string, vocab map[string]string, tokenizerConfig map[string]interface{}) ([]int, error) {
+func Tokenize2(text string, vocab map[string]int, tokenizerConfig map[string]interface{}) ([]int, error) {
 	// Simpan token ke ID dalam map
 	tokenToID := make(map[string]int)
 	for k, v := range vocab {
-		id, err := strconv.Atoi(v)
+		id, err := strconv.Atoi(strconv.Itoa(v))
 		if err != nil {
 			return nil, fmt.Errorf("invalid token ID in vocab: %v", err)
 		}
