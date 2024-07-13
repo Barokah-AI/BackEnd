@@ -5,54 +5,33 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strings"
-	"io"
-	"context"
 	"strconv"
+	"strings"
+	"bytes"
 
 	"github.com/Barokah-AI/BackEnd/model"
 
-	"cloud.google.com/go/storage"
 )
-
-
-// Fungsi untuk membaca file dari GCS
-func readFileFromGCS(bucketName, fileName string) ([]byte, error) {
-	ctx := context.Background()
-
-	client, err := storage.NewClient(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create client: %v", err)
-	}
-	defer client.Close()
-
-	bucket := client.Bucket(bucketName)
-	obj := bucket.Object(fileName)
-	r, err := obj.NewReader(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create reader: %v", err)
-	}
-	defer r.Close()
-
-	data, err := io.ReadAll(r)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read data: %v", err)
-	}
-
-	return data, nil
-}
 
 // Fungsi untuk membaca vocab dari GCS
 func ReadVocabFromGCS(bucketName, fileName string) (map[string]string, error) {
-	data, err := readFileFromGCS(bucketName, fileName)
+	data, err := ReadFileFromGCS(bucketName, fileName)
 	if err != nil {
 		return nil, err
 	}
 
 	vocab := make(map[string]string)
-	err = json.Unmarshal(data, &vocab)
-	if err != nil {
-		return nil, fmt.Errorf("error unmarshalling vocab: %v", err)
+	scanner := bufio.NewScanner(bytes.NewReader(data))
+	for scanner.Scan() {
+		line := scanner.Text()
+		parts := strings.Fields(line)
+		if len(parts) != 2 {
+			return nil, fmt.Errorf("invalid line in vocab file: %s", line)
+		}
+		vocab[parts[0]] = parts[1]
+	}
+	if err := scanner.Err(); err != nil {
+		return nil, fmt.Errorf("error reading vocab file: %v", err)
 	}
 
 	return vocab, nil
@@ -60,7 +39,7 @@ func ReadVocabFromGCS(bucketName, fileName string) (map[string]string, error) {
 
 // Fungsi untuk membaca tokenizer config dari GCS
 func ReadTokenizerConfigFromGCS(bucketName, fileName string) (map[string]interface{}, error) {
-	data, err := readFileFromGCS(bucketName, fileName)
+	data, err := ReadFileFromGCS(bucketName, fileName)
 	if err != nil {
 		return nil, err
 	}
