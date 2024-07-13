@@ -1,9 +1,11 @@
 package controller
 
 import (
+	"bytes"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
+	io "io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -13,7 +15,6 @@ import (
 	"github.com/Barokah-AI/BackEnd/config"
 	"github.com/Barokah-AI/BackEnd/helper"
 	"github.com/Barokah-AI/BackEnd/model"
-	"github.com/go-resty/resty/v2"
 )
 
 // LoadDataset loads the dataset from the given CSV file and returns a map of label to question-answer pair
@@ -43,60 +44,48 @@ func LoadDataset(filePath string) (map[string][]string, error) {
 	return labelToQA, nil
 }
 
-// NormalizeText normalizes the text by converting to lowercase and removing punctuation
-func NormalizeText(text string) string {
-	// Convert to lowercase
-	text = strings.ToLower(text)
-	// Remove punctuation
-	text = strings.Map(func(r rune) rune {
-		if strings.ContainsRune("abcdefghijklmnopqrstuvwxyz0123456789 ", r) {
-			return r
-		}
-		return -1
-	}, text)
-	return text
-}
-
-// Chat is the controller for handling chat requests
-func Chat(respw http.ResponseWriter, req *http.Request, apiKey string) {
-	var chat model.AIRequest
-
-	err := json.NewDecoder(req.Body).Decode(&chat)
-	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
-		return
-	}
-
-	if chat.Prompt == "" {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "masukin pertanyaan dulu ya kak 🤗")
-		return
-	}
-
-	client := resty.New()
-
-	// Hugging Face API URL dan token
+func callHuggingFaceAPI(prompt string) (string, float64, error) {
 	apiUrl := config.GetEnv("HUGGINGFACE_API_URL")
 	apiToken := "Bearer " + config.GetEnv("HUGGINGFACE_API_KEY")
 
-	response, err := client.R().
-		SetHeader("Authorization", apiToken).
-		SetHeader("Content-Type", "application/json").
-		SetBody(`{"inputs": "` + chat.Prompt + `"}`).
-		Post(apiUrl)
-
+	reqBody := model.HFRequest{Inputs: prompt}
+	jsonReqBody, err := json.Marshal(reqBody)
 	if err != nil {
-		log.Fatalf("Error making request: %v", err)
+		return "", 0, fmt.Errorf("error marshalling request body: %v", err)
 	}
 
-	// Log response body
-	// log.Printf("Response from Hugging Face API: %s", response.String())
+	req, err := http.NewRequest("POST", apiUrl, bytes.NewBuffer(jsonReqBody))
+	if err != nil {
+		return "", 0, fmt.Errorf("error creating request: %v", err)
+	}
+	req.Header.Set("Authorization", apiToken)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", 0, fmt.Errorf("error making request to Hugging Face API: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		bodyBytes, _ := io.ReadAll(resp.Body)
+		return "", 0, fmt.Errorf("unexpected status code from Hugging Face API: %d | Server HF Response: %s", resp.StatusCode, string(bodyBytes))
+	}
+
+	// Read and print the response body
+	bodyBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", 0, fmt.Errorf("error reading response body: %v", err)
+	}
+	responseBody := string(bodyBytes)
+	fmt.Println("HF API Response:", responseBody) // Print the raw response
 
 	// Handle the expected nested array structure
 	var nestedData [][]map[string]interface{}
-	err = json.Unmarshal([]byte(response.String()), &nestedData)
+	err = json.Unmarshal(bodyBytes, &nestedData)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error decoding response: "+err.Error()+" | Server HF Response: "+response.String())
-		return
+		return "", 0, fmt.Errorf("error decoding response: %v | Server HF Response: %s", err, responseBody)
 	}
 
 	// Flatten the nested array structure
@@ -105,50 +94,95 @@ func Chat(respw http.ResponseWriter, req *http.Request, apiKey string) {
 		flatData = append(flatData, d...)
 	}
 
-	// Extracting the highest scoring label from the model output
-	var bestLabel string
-	var highestScore float64
-	for _, item := range flatData {
-		label, labelOk := item["label"].(string)
-		score, scoreOk := item["score"].(float64)
-		if labelOk && scoreOk && (bestLabel == "" || score > highestScore) {
-			bestLabel = label
-			highestScore = score
+	// Check if the flat data has at least one element
+	if len(flatData) == 0 {
+		return "", 0, fmt.Errorf("empty response after flattening nested structure: %s", responseBody)
+	}
+
+	// Assume the first element contains the best response
+	bestResponse := flatData[0]
+
+	// Extract label and score from the best response
+	label, ok := bestResponse["label"].(string)
+	if !ok {
+		return "", 0, fmt.Errorf("missing or invalid label in response: %s", responseBody)
+	}
+	score, ok := bestResponse["score"].(float64)
+	if !ok {
+		// Handle the case where the score might be an integer
+		if scoreInt, ok := bestResponse["score"].(int); ok {
+			score = float64(scoreInt)
+		} else {
+			return "", 0, fmt.Errorf("missing or invalid score in response: %s", responseBody)
 		}
 	}
 
-	if bestLabel != "" {
-		// Path relatif ke dataset
-		datasetPath := ("../dataset/barokah.csv")
-		// datasetPath := config.GetEnv("DATASET_PATH")
-		// datasetPath := "./dataset/questions.csv"
+	return label, score, nil
+}
 
-		// Log path dataset untuk debugging
-        log.Printf("Dataset path : %s", datasetPath)
-		
-		// Load the dataset
-		labelToQA, err := LoadDataset(datasetPath)
-		if err != nil {
-			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "server error: could not load dataset: "+err.Error())
-			return
-		}
+func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
+	var chat model.AIRequest
 
-		// Get the answer corresponding to the best label
-		record, ok := labelToQA[bestLabel]
-		if !ok {
-			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "server error: label not found in dataset")
-			return
-		}
-
-		answer := record[1]
-
-		helper.WriteJSON(respw, http.StatusOK, map[string]string{
-			"prompt":   chat.Prompt,
-			"response": answer,
-			"label":    bestLabel,
-			"score":    strconv.FormatFloat(highestScore, 'f', -1, 64),
-		})
-	} else {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : response")
+	err := json.NewDecoder(req.Body).Decode(&chat)
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Tidak Valid", "error saat membaca isi permintaan: "+err.Error())
+		return
 	}
+
+	if chat.Prompt == "" {
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Tidak Valid", "masukin pertanyaan dulu ya kakak 🤗")
+		return
+	}
+
+	// Read and use the tokenizer
+	vocab, err := readVocab("../helper/vocab.txt")
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak bisa membaca vocab: "+err.Error())
+		return
+	}
+
+	tokenizerConfig, err := readTokenizerConfig("../helper/tokenizer_config.json")
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak bisa membaca konfigurasi tokenizer: "+err.Error())
+		return
+	}
+
+	tokens, err := tokenize(chat.Prompt, vocab, tokenizerConfig)
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "error saat melakukan tokenisasi: "+err.Error())
+		return
+	}
+
+	// Convert tokens to string for API call
+	tokensStr := strings.Trim(strings.Join(strings.Fields(fmt.Sprint(tokens)), " "), "[]")
+
+	// Call Hugging Face API with tokenized prompt
+	label, score, err := callHuggingFaceAPI(tokensStr)
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "model sedang diload: "+err.Error())
+		return
+	}
+
+	// Load the dataset
+	datasetPath := ("../dataset/barokah.csv")
+	labelToQA, err := LoadDataset(datasetPath)
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: tidak bisa memuat dataset: "+err.Error())
+		return
+	}
+
+	record, ok := labelToQA[label]
+	if !ok {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: label tidak ditemukan dalam dataset")
+		return
+	}
+
+	answer := record[1]
+
+	helper.WriteJSON(respw, http.StatusOK, map[string]string{
+		"prompt":   chat.Prompt,
+		"response": answer,
+		"label":    label,
+		"score":    strconv.FormatFloat(score, 'f', -1, 64),
+	})
 }
