@@ -6,9 +6,73 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"io"
+	"context"
+	"strconv"
 
 	"github.com/Barokah-AI/BackEnd/model"
+
+	"cloud.google.com/go/storage"
 )
+
+
+// Fungsi untuk membaca file dari GCS
+func readFileFromGCS(bucketName, fileName string) ([]byte, error) {
+	ctx := context.Background()
+
+	client, err := storage.NewClient(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create client: %v", err)
+	}
+	defer client.Close()
+
+	bucket := client.Bucket(bucketName)
+	obj := bucket.Object(fileName)
+	r, err := obj.NewReader(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create reader: %v", err)
+	}
+	defer r.Close()
+
+	data, err := io.ReadAll(r)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read data: %v", err)
+	}
+
+	return data, nil
+}
+
+// Fungsi untuk membaca vocab dari GCS
+func ReadVocabFromGCS(bucketName, fileName string) (map[string]string, error) {
+	data, err := readFileFromGCS(bucketName, fileName)
+	if err != nil {
+		return nil, err
+	}
+
+	vocab := make(map[string]string)
+	err = json.Unmarshal(data, &vocab)
+	if err != nil {
+		return nil, fmt.Errorf("error unmarshalling vocab: %v", err)
+	}
+
+	return vocab, nil
+}
+
+// Fungsi untuk membaca tokenizer config dari GCS
+func ReadTokenizerConfigFromGCS(bucketName, fileName string) (map[string]interface{}, error) {
+	data, err := readFileFromGCS(bucketName, fileName)
+	if err != nil {
+		return nil, err
+	}
+
+	var config map[string]interface{}
+	err = json.Unmarshal(data, &config)
+	if err != nil {
+		return nil, fmt.Errorf("error unmarshalling tokenizer config: %v", err)
+	}
+
+	return config, nil
+}
 
 // Baca file vocab.txt dan return map dari kata ke index
 func ReadVocab(filePath string) (map[string]int, error) {
@@ -85,6 +149,38 @@ func Tokenize(text string, vocab map[string]int, config *model.TokenizerConfig) 
 	} else {
 		return nil, fmt.Errorf("SEP token not found in vocab")
 	}
+
+	return tokens, nil
+}
+
+func Tokenize2(text string, vocab map[string]string, tokenizerConfig map[string]interface{}) ([]int, error) {
+	// Simpan token ke ID dalam map
+	tokenToID := make(map[string]int)
+	for k, v := range vocab {
+		id, err := strconv.Atoi(v)
+		if err != nil {
+			return nil, fmt.Errorf("invalid token ID in vocab: %v", err)
+		}
+		tokenToID[k] = id
+	}
+
+	// Tokenisasi sederhana berdasarkan spasi
+	words := strings.Fields(text)
+	tokens := []int{}
+
+	for _, word := range words {
+		id, exists := tokenToID[word]
+		if !exists {
+			id = tokenToID[tokenizerConfig["unk_token"].(string)]
+		}
+		tokens = append(tokens, id)
+	}
+
+	// Tambahkan token CLS dan SEP
+	clsToken := tokenToID[tokenizerConfig["cls_token"].(string)]
+	sepToken := tokenToID[tokenizerConfig["sep_token"].(string)]
+	tokens = append([]int{clsToken}, tokens...)
+	tokens = append(tokens, sepToken)
 
 	return tokens, nil
 }
