@@ -19,6 +19,8 @@ func URL(w http.ResponseWriter, r *http.Request) {
 		Home(w, r)
 	case method == "POST" && path == "/chat":
 		controller.Chat(w, r, config.GetEnv("HUGGINGFACE_API_KEY"))
+	case method == "POST" && path == "/ngobrol":
+		controller.Ngobrol(w, r, config.GetEnv("HUGGINGFACE_API_KEY"))
 	default:
 		helper.ErrorResponse(w, r, http.StatusNotFound, "Not Found", "The requested resource was not found")
 	}
