@@ -21,6 +21,10 @@ func URL(w http.ResponseWriter, r *http.Request) {
 		controller.Chat(w, r, config.GetEnv("HUGGINGFACE_API_KEY"))
 	case method == "POST" && path == "/ngobrol":
 		controller.Ngobrol(w, r, config.GetEnv("HUGGINGFACE_API_KEY"))
+	// case method == "POST" && path == "/signup":
+	// 	controller.SignUp(config.Mongoconn, "users", w, r)
+	// case method == "POST" && path == "/login":
+	// 	controller.LogIn(config.Mongoconn, w, r, config.GetEnv("PASETOPRIVATEKEY"))
 	default:
 		helper.ErrorResponse(w, r, http.StatusNotFound, "Not Found", "The requested resource was not found")
 	}
@@ -29,7 +33,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 func Home(respw http.ResponseWriter, req *http.Request) {
 	resp := map[string]string{
 		"github_repo": "https://github.com/barokah-ai/backend",
-		"message": "Insyallah Berkah 🤞",
+		"message":     "Insyallah Berkah 🤞",
 	}
 	helper.WriteJSON(respw, http.StatusOK, resp)
 }
