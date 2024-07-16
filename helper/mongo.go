@@ -2,22 +2,18 @@ package helper
 
 import (
 	"context"
-	"errors"
-	"fmt"
 
-	"github.com/Barokah-AI/BackEnd/model"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// func InsertOneDoc(db *mongo.Database, col string, doc any) (insertedID primitive.ObjectID, err error) {
-// 	result, err := db.Collection(col).InsertOne(context.Background(), doc)
-// 	if err != nil {
-// 		return
-// 	}
-// 	return result.InsertedID.(primitive.ObjectID), nil
-// }
+func InsertOneDoc(db *mongo.Database, col string, doc any) (insertedID primitive.ObjectID, err error) {
+	result, err := db.Collection(col).InsertOne(context.Background(), doc)
+	if err != nil {
+		return
+	}
+	return result.InsertedID.(primitive.ObjectID), nil
+}
 
 // func GetUserFromEmail(email string, db *mongo.Database) (doc model.User, err error) {
 // 	collection := db.Collection("users")
@@ -37,15 +33,15 @@ import (
 // 	collection := db.Collection(col)
 // 	cursor, err := collection.Find(ctx, filter)
 // 	if err != nil {
-// 		return 
+// 		return
 // 	}
 // 	defer cursor.Close(ctx)
 // 	err = cursor.All(context.TODO(), &docs)
 // 	if err != nil {
-// 		return 
+// 		return
 // 	}
-// 	return 
-// 
+// 	return
+//
 
 // func GetUserFromID(_id primitive.ObjectID, db *mongo.Database) (doc model.User, err error) {
 // 	collection := db.Collection("users")
@@ -59,7 +55,3 @@ import (
 // 	}
 // 	return doc, nil
 // }
-
-
-
-
