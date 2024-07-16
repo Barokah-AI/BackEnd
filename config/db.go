@@ -19,4 +19,12 @@ import (
 // 	return client.Database(mconn.DBName), nil
 // }
 
+// var MongoString string = GetEnv("MONGOSTRING")
+
+// var mongoinfo = DBInfo{
+// 	DBString: MongoString,
+// 	DBName:   "db_barokah",
+// }
+
+// var Mongoconn, ErrorMongoconn = MongoConnect(mongoinfo)
 
