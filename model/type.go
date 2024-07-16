@@ -15,6 +15,12 @@ type User struct {
 	Salt            string             `bson:"salt,omitempty" json:"salt,omitempty"`
 }
 
+type Password struct {
+	Password        string `bson:"password,omitempty" json:"password,omitempty"`
+	Newpassword     string `bson:"newpass,omitempty" json:"newpass,omitempty"`
+	Confirmpassword string `bson:"confirmpass,omitempty" json:"confirmpass,omitempty"`
+}
+
 // Struct untuk membaca request dari user
 type AIRequest struct {
 	Prompt   	    string             `bson:"prompt,omitempty" json:"prompt,omitempty"`
