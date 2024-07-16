@@ -5,6 +5,16 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// Struct User
+type User struct {
+	ID              primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	NamaLengkap     string             `bson:"namalengkap,omitempty" json:"namalengkap,omitempty"`
+	Email           string             `bson:"email,omitempty" json:"email,omitempty"`
+	Password        string             `bson:"password,omitempty" json:"password,omitempty"`
+	Confirmpassword string             `bson:"confirmpass,omitempty" json:"confirmpass,omitempty"`
+	Salt            string             `bson:"salt,omitempty" json:"salt,omitempty"`
+}
+
 // Struct untuk membaca request dari user
 type AIRequest struct {
 	Prompt   	    string             `bson:"prompt,omitempty" json:"prompt,omitempty"`
