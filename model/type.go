@@ -30,3 +30,9 @@ type TokenizerConfig struct {
 	MaskToken     string `json:"mask_token"`
 	UnkToken      string `json:"unk_token"`
 }
+
+type Credential struct {
+	Status  int    `json:"status" bson:"status"`
+	Token   string `json:"token,omitempty" bson:"token,omitempty"`
+	Message string `json:"message,omitempty" bson:"message,omitempty"`
+}
