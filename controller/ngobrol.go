@@ -17,12 +17,12 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
     err := json.NewDecoder(req.Body).Decode(&chat)
     if err != nil {
-        helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Tidak Valid", "error saat membaca isi permintaan: "+err.Error())
+        helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Anda Tidak Valid", "error saat membaca isi permintaan: "+err.Error())
         return
     }
 
     if chat.Prompt == "" {
-        helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Tidak Valid", "masukin pertanyaan dulu ya kakak 🤗")
+        helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Anda Tidak Valid", "masukin pertanyaan dulu ya kakak 🤗")
         return
     }
 
@@ -33,19 +33,19 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
     // Read and use the tokenizer
 	vocab, err := helper.ReadVocabFromGCS(bucketName, vocabObjectName)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak bisa membaca vocab: "+err.Error())
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Ini Kesalahan Server Internal", "sistem tidak bisa membaca vocab: "+err.Error())
 		return
 	}
 
 	tokenizerConfig, err := helper.ReadTokenizerConfigFromGCS(bucketName, tokenizerConfigName)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak bisa membaca konfigurasi tokenizer: "+err.Error())
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Ini Kesalahan Server Internal", "tidak bisa membaca konfigurasi tokenizer: "+err.Error())
 		return
 	}
 
 	tokens, err := helper.Tokenize2(chat.Prompt, vocab, tokenizerConfig)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "error saat melakukan tokenisasi: "+err.Error())
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Ini Kesalahan Server Internal", "error saat melakukan tokenisasi: "+err.Error())
 		return
 	}
 
@@ -56,7 +56,7 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 	// Call Hugging Face API with tokenized prompt
 	label, score, err := helper.CallHuggingFaceAPI(tokensStr)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "model sedang diload: "+err.Error())
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Ini Kesalahan Server Internal", "model sedang diload: "+err.Error())
 		return
 	}
 
@@ -66,14 +66,14 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
     labelToQA, err := helper.LoadDatasetGCS(bucketName, objectName)
     if err != nil {
-        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: tidak bisa memuat dataset: "+err.Error())
+        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Ini Kesalahan Server Internal", "kesalahan server: tidak bisa memuat dataset: "+err.Error())
         return
     }
 
     // Get the answer corresponding to the best label
     record, ok := labelToQA[label]
     if !ok {
-        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: label tidak ditemukan dalam dataset")
+        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Ini Kesalahan Server Internal", "kesalahan server: label tidak ditemukan dalam dataset")
         return
     }
 
