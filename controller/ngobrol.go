@@ -33,19 +33,19 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
     // Read and use the tokenizer
 	vocab, err := helper.ReadVocabFromGCS(bucketName, vocabObjectName)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak bisa membaca vocab: "+err.Error())
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak dapat membaca vocab: "+err.Error())
 		return
 	}
 
 	tokenizerConfig, err := helper.ReadTokenizerConfigFromGCS(bucketName, tokenizerConfigName)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak bisa membaca konfigurasi tokenizer: "+err.Error())
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak dapat membaca konfigurasi tokenizer: "+err.Error())
 		return
 	}
 
 	tokens, err := helper.Tokenize2(chat.Prompt, vocab, tokenizerConfig)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "error saat melakukan tokenisasi: "+err.Error())
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "error ketika melakukan tokenisasi: "+err.Error())
 		return
 	}
 
@@ -56,7 +56,7 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 	// Call Hugging Face API with tokenized prompt
 	label, score, err := helper.CallHuggingFaceAPI(tokensStr)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "model sedang diload: "+err.Error())
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "model sedang diproses: "+err.Error())
 		return
 	}
 
@@ -66,7 +66,7 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
     labelToQA, err := helper.LoadDatasetGCS(bucketName, objectName)
     if err != nil {
-        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: tidak bisa memuat dataset: "+err.Error())
+        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "ada kesalahan server: tidak bisa memuat dataset: "+err.Error())
         return
     }
 
