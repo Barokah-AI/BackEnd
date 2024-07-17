@@ -47,7 +47,7 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
     // Periksa jika model sedang dimuat
 	if response.StatusCode() == http.StatusServiceUnavailable {
-		helper.ErrorResponse(respw, req, http.StatusServiceUnavailable, "Internal Server Error", "Model sedang dimuat, coba lagi sebentar ya kakak 🙏 | HF Response: "+response.String())
+		helper.ErrorResponse(respw, req, http.StatusServiceUnavailable, "Internal Server Error", "Model lagi dimuat, di coba lagi aja ya kakak 🙏 | HF Response: "+response.String())
 		return
 	}
 
