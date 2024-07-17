@@ -1,35 +1,34 @@
 package BackEnd_test
 
-// import (
-// 	"testing"
-// 	"fmt"
+import (
+	"testing"
 
-// 	"github.com/Barokah-AI/BackEnd/config"
-// 	helper "github.com/Barokah-AI/BackEnd/helper"
-// 	controller "github.com/Barokah-AI/BackEnd/local/controller"
-// 	model "github.com/Barokah-AI/BackEnd/model"
-// )
+	"github.com/Barokah-AI/BackEnd/config"
+	helper "github.com/Barokah-AI/BackEnd/helper"
+	// controller "github.com/Barokah-AI/BackEnd/local/controller"
+	
+)
 
-// // var db = config.MongoConnect("MONGOSTRING", "db_barokah")
+// var db = config.MongoConnect("MONGOSTRING", "db_barokah")
 
-// func TestGenerateKey(t *testing.T) {
-// 	privateKey, publicKey := helper.GenerateKey()
-// 	t.Logf("PrivateKey : %v", privateKey)
-// 	t.Logf("PublicKey : %v", publicKey)
-// }
+func TestGenerateKey(t *testing.T) {
+	privateKey, publicKey := helper.GenerateKey()
+	t.Logf("PrivateKey : %v", privateKey)
+	t.Logf("PublicKey : %v", publicKey)
+}
 
-// // // TestInsertOneDoc
-// // func TestInsertOneDoc(t *testing.T) {
-// // 	var data = map[string]interface{}{
-// // 		"username": "teeamai",
-// // 		"password": "12345",
-// // 	}
-// // 	insertedDoc, err := helper.InsertOneDoc(config.Mongoconn, "users", data)
-// // 	if err != nil {
-// // 		t.Errorf("Error : %v", err)
-// // 	}
-// // 	t.Logf("InsertedDoc : %v", insertedDoc)
-// // }
+// TestInsertOneDoc
+func TestInsertOneDoc(t *testing.T) {
+	var data = map[string]interface{}{
+		"username": "teeamai",
+		"password": "12345",
+	}
+	insertedDoc, err := helper.InsertOneDoc(config.Mongoconn, "users", data)
+	if err != nil {
+		t.Errorf("Error : %v", err)
+	}
+	t.Logf("InsertedDoc : %v", insertedDoc)
+}
 
 // func TestSignUp(t *testing.T) {
 // 	// var db = config.MongoConnect
@@ -46,14 +45,14 @@ package BackEnd_test
 // 	}
 // }
 
-// // func TestLogIn(t *testing.T) {
-// // 	var user model.User
-// // 	user.Email = "pedped@gmail.com"
-// // 	user.Password = "pedi12345"
-// // 	user, err := controller.LogIn(db, user)
-// // 	if err != nil {
-// // 		fmt.Println(err)
-// // 	} else {
-// // 		fmt.Println("Berhasil LogIn : ", user.Email)
-// // 	}
-// // }
+// func TestLogIn(t *testing.T) {
+// 	var user model.User
+// 	user.Email = "pedped@gmail.com"
+// 	user.Password = "pedi12345"
+// 	user, err := controller.LogIn(db, user)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	} else {
+// 		fmt.Println("Berhasil LogIn : ", user.Email)
+// 	}
+// }
