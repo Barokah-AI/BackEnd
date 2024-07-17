@@ -28,32 +28,32 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 
 	// check if user data is empty
 	if user.NamaLengkap == "" || user.Email == "" || user.Password == "" || user.Confirmpassword == "" {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi datanya ya")
 		return
 	}
 
 	// check if email is valid
 	if err := checkmail.ValidateFormat(user.Email); err != nil {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email tidak valid")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "emailnya tidak valid")
 		return
 	}
 
 	// check if email already exists
 	userExists, _ := helper.GetUserFromEmail(user.Email, db)
 	if user.Email == userExists.Email {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email sudah terdaftar")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "emailnya sudah terdaftar")
 		return
 	}
 
 	// check if password and confirm password match
 	if strings.Contains(user.Password, " ") {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "password tidak boleh mengandung spasi")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "passwordnya tidak boleh mengandung spasi")
 		return
 	}
 
 	// check if password is at least 8 characters
 	if len(user.Password) < 8 {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "password minimal 8 karakter")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "passwordnya minimal 8 karakter")
 		return
 	}
 
@@ -85,7 +85,7 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 
 	// response
 	resp := map[string]any{
-		"message":    "berhasil mendaftar",
+		"message":    "berhasil mendaftar akun",
 		"insertedID": insertedID,
 		"data": map[string]string{
 			"email": user.Email,
