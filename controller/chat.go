@@ -17,12 +17,12 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
     err := json.NewDecoder(req.Body).Decode(&chat)
     if err != nil {
-        helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
+        helper.ErrorResponse(respw, req, http.StatusBadRequest, "Danger Bad Request", "error parsing request body "+err.Error())
         return
     }
 
     if chat.Prompt == "" {
-        helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "masukin pertanyaan dulu ya kakak 🤗")
+        helper.ErrorResponse(respw, req, http.StatusBadRequest, "Super Bad Request", "masukin pertanyaan dulu ya kakak 🤗")
         return
     }
 
@@ -39,7 +39,7 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
         Post(apiUrl)
 
     if err != nil {
-        log.Fatalf("Error making request: %v", err)
+        log.Fatalf("This is Error making request: %v", err)
     }
 
     // Log response body
