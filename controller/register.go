@@ -70,10 +70,10 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 
 	// insert user data to database
 	userData := bson.M{
-		"namalengkaps": user.NamaLengkap,
-		"emails":       user.Email,
-		"passwords":    hex.EncodeToString(hashedPassword),
-		"salts":        hex.EncodeToString(salt),
+		"namalengkap": user.NamaLengkap,
+		"email":       user.Email,
+		"password":    hex.EncodeToString(hashedPassword),
+		"salt":        hex.EncodeToString(salt),
 	}
 
 	// check if user data is empty
