@@ -78,13 +78,24 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 		   }
 
 		     // Extracting the highest scoring label from the model output
-    var bestLabel string
-    var highestScore float64
-    for _, item := range flatData {
-        label, labelOk := item["label"].(string)
-        score, scoreOk := item["score"].(float64)
-        if labelOk && scoreOk && (bestLabel == "" || score > highestScore) {
-            bestLabel = label
-            highestScore = score
-        }
-    }
+			var bestLabel string
+			var highestScore float64
+			for _, item := range flatData {
+				label, labelOk := item["label"].(string)
+				score, scoreOk := item["score"].(float64)
+				if labelOk && scoreOk && (bestLabel == "" || score > highestScore) {
+					bestLabel = label
+					highestScore = score
+				}
+			}
+
+			if bestLabel != "" {
+				// Load the dataset from GCS
+				bucketName := config.GetEnv("GCS_BUCKET_NAME")
+				objectName := config.GetEnv("GCS_DATASET_FILE")
+
+				labelToQA, err := helper.LoadDatasetGCS(bucketName, objectName)
+				if err != nil {
+					helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "server error: could not load dataset: "+err.Error())
+					return
+				}
