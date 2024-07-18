@@ -25,3 +25,7 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
         helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Tidak Valid", "masukin pertanyaan dulu ya kakak 🤗")
         return
     }
+
+	bucketName := config.GetEnv("GCS_BUCKET_NAME")
+    vocabObjectName := config.GetEnv("GCS_VOCAB_FILE")
+    tokenizerConfigName := config.GetEnv("GCS_TOKENIZER_CONFIG_FILE")
