@@ -17,7 +17,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	switch {
 	case method == "GET" && path == "/":
 		Home(w, r)
-	case method == "POST" && path == "/hat":
+	case method == "POST" && path == "/chat":
 		controller.Chat(w, r, config.GetEnv("HUGGINGFACE_API_KEY"))
 	case method == "POST" && path == "/ngobrol":
 		controller.Ngobrol(w, r, config.GetEnv("HUGGINGFACE_API_KEY"))
