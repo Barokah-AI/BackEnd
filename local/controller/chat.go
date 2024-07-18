@@ -15,8 +15,8 @@ import (
 )
 
 func callHuggingFaceAPI(prompt string) (string, float64, error) {
-	apiUrl := config.GetEnv("HUGGINGFACE_API_URL")
-	apiToken := "Bearer " + config.GetEnv("HUGGINGFACE_API_KEY")
+	apiUrl := config.Getenv("HUGGINGFACE_API_URL")
+	apiToken := "Bearer " + config.Getenv("HUGGINGFACE_API_KEY")
 
 	reqBody := model.HFRequest{Inputs: prompt}
 	jsonReqBody, err := json.Marshal(reqBody)
@@ -105,7 +105,7 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 	}
 
 	// Read and use the tokenizer
-	vocab, err := readVocab("../helper/vocab.txt")
+	vocab, err := ReadVocab("../helper/vocab.txt")
 	if err != nil {
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak bisa membaca vocab: "+err.Error())
 		return
