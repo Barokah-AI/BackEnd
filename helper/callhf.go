@@ -17,9 +17,9 @@ func CallHuggingFaceAPI(prompt string) (string, float64, error) {
 
     reqBody := model.HFRequest{Inputs: prompt}
     jsonReqBody, err := json.Marshal(reqBody)
-    // if err != nil {
-    //     return "", 0, fmt.Errorf("error marshalling request body: %v", err)
-    // }
+    if err != nil {
+        return "", 0, fmt.Errorf("error marshalling request body: %v", err)
+    }
 
     req, err := http.NewRequest("POST", apiUrl, bytes.NewBuffer(jsonReqBody))
     if err != nil {
