@@ -9,3 +9,7 @@ import (
 func init() {
 	functions.HTTP("WebHook", routes.URL)
 }
+
+func init() {
+	functions.HTTP("WebHook", routes.URL)
+}
