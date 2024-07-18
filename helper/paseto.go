@@ -9,6 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// struct yang digunakan untuk menyimpan data payload
 type Payload struct {
 	Id    primitive.ObjectID `json:"id"`
 	Email string             `json:"email"`
