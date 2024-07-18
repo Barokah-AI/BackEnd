@@ -95,31 +95,31 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
 	err := json.NewDecoder(req.Body).Decode(&chat)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Kamu Tidak Valid", "Error Saat Membaca Isi Permintaan: "+err.Error())
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Kamu Tidak Valid", "error saat membaca isi permintaan: "+err.Error())
 		return
 	}
 
 	if chat.Prompt == "" {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Kamu Tidak Valid", "Masukin Pertanyaan Dulu ya Kakak 🤗")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Kamu Tidak Valid", "masukin pertanyaan dulu ya kakak 🤗")
 		return
 	}
 
 	// Read and use the tokenizer
 	vocab, err := readVocab("../helper/vocab.txt")
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "Tidak Bisa Membaca Vocab: "+err.Error())
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak bisa membaca vocab: "+err.Error())
 		return
 	}
 
 	tokenizerConfig, err := readTokenizerConfig("../helper/tokenizer_config.json")
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "Tidak Bisa Membaca Konfigurasi Tokenizer: "+err.Error())
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak bisa membaca konfigurasi tokenizer: "+err.Error())
 		return
 	}
 
 	tokens, err := tokenize(chat.Prompt, vocab, tokenizerConfig)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "Error Saat Melakukan Tokenisasi: "+err.Error())
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "error saat melakukan tokenisasi: "+err.Error())
 		return
 	}
 
