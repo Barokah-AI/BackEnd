@@ -164,3 +164,35 @@ func Tokenize2(text string, vocab map[string]int, tokenizerConfig map[string]int
 
 	return tokens, nil
 }
+
+func Tokenize3(text string, vocab map[string]int, tokenizerConfig map[string]interface{}) ([]int, error) {
+	// Simpan token ke ID dalam map
+	tokenToID := make(map[string]int)
+	for k, v := range vocab {
+		id, err := strconv.Atoi(strconv.Itoa(v))
+		if err != nil {
+			return nil, fmt.Errorf("invalid token ID in vocab: %v", err)
+		}
+		tokenToID[k] = id
+	}
+
+	// Tokenisasi sederhana berdasarkan spasi
+	words := strings.Fields(text)
+	tokens := []int{}
+
+	for _, word := range words {
+		id, exists := tokenToID[word]
+		if !exists {
+			id = tokenToID[tokenizerConfig["unk_token"].(string)]
+		}
+		tokens = append(tokens, id)
+	}
+
+	// Tambahkan token CLS dan SEP
+	clsToken := tokenToID[tokenizerConfig["cls_token"].(string)]
+	sepToken := tokenToID[tokenizerConfig["sep_token"].(string)]
+	tokens = append([]int{clsToken}, tokens...)
+	tokens = append(tokens, sepToken)
+
+	return tokens, nil
+}
