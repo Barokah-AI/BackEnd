@@ -37,3 +37,16 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
         SetHeader("Content-Type", "application/json").
         SetBody(`{"inputs": "` + chat.Prompt + `"}`).
         Post(apiUrl)
+
+		if err != nil {
+			log.Fatalf("Error making request: %v", err)
+		}
+	
+		// Log response body
+		// log.Printf("Response from Hugging Face API: %s", response.String())
+	
+		// Periksa jika model sedang dimuat
+		if response.StatusCode() == http.StatusServiceUnavailable {
+			helper.ErrorResponse(respw, req, http.StatusServiceUnavailable, "Internal Server Error", "Model sedang dimuat, coba lagi sebentar ya kakak 🙏 | HF Response: "+response.String())
+			return
+		}
