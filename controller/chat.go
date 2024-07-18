@@ -56,3 +56,9 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 			helper.ErrorResponse(respw, req, http.StatusNotFound, "Not Found", "Model tidak ditemukan | HF Response: "+response.String())
 			return
 		}
+
+		 // Periksa jika model mengembalikan status code lain
+		 if response.StatusCode() != http.StatusOK {
+			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: "+response.String())
+			return
+		}
