@@ -56,7 +56,7 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 	// Call Hugging Face API with tokenized prompt
 	label, score, err := helper.CallHuggingFaceAPI(tokensStr)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "Model Sedang Diload: "+err.Error())
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "model sedang diload: "+err.Error())
 		return
 	}
 
@@ -66,14 +66,14 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
     labelToQA, err := helper.LoadDatasetGCS(bucketName, objectName)
     if err != nil {
-        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: Tidak Bisa Memuat Dataset: "+err.Error())
+        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: tidak bisa memuat dataset: "+err.Error())
         return
     }
 
     // Get the answer corresponding to the best label
     record, ok := labelToQA[label]
     if !ok {
-        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: Label Tidak Ditemukan Dalam Dataset")
+        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: label tidak ditemukan dalam dataset")
         return
     }
 
