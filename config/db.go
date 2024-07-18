@@ -20,7 +20,7 @@ func MongoConnect(mconn DBInfo) (db *mongo.Database, err error) {
 	return client.Database(mconn.DBName), nil
 }
 
-var MongoString string = Getenv("MONGOSTRING")
+var MongoString string = GetEnv("MONGOSTRING")
 
 var mongoinfo = DBInfo{
 	DBString: MongoString,
