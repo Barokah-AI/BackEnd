@@ -69,3 +69,9 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 		  return
 	  }
   
+	    // Get the answer corresponding to the best label
+		record, ok := labelToQA[label]
+		if !ok {
+			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: label tidak ditemukan dalam dataset")
+			return
+		}
