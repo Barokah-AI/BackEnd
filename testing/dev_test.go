@@ -17,12 +17,6 @@ func TestGenerateKey(t *testing.T) {
 	t.Logf("PublicKey : %v", publicKey)
 }
 
-func TestGenerateKey1(t *testing.T) {
-	privateKey, publicKey := helper.GenerateKey()
-	t.Logf("PrivateKey : %v", privateKey)
-	t.Logf("PublicKey : %v", publicKey)
-}
-
 // TestInsertOneDoc
 func TestInsertOneDoc(t *testing.T) {
 	var data = map[string]interface{}{
