@@ -26,28 +26,28 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 	}
 
 	if user.NamaLengkap == "" || user.Email == "" || user.Password == "" || user.Confirmpassword == "" {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "Mohon Untuk Melengkapi Datanya")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi datanya")
 		return
 	}
 
 	if err := checkmail.ValidateFormat(user.Email); err != nil {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "Email Tidak Valid")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email tidak valid")
 		return
 	}
 
 	userExists, _ := helper.GetUserFromEmail(user.Email, db)
 	if user.Email == userExists.Email {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "Email Sudah Terdaftar")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email sudah terdaftar")
 		return
 	}
 
 	if strings.Contains(user.Password, " ") {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "Password Tidak Boleh Mengandung Spasi")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "password tidak boleh mengandung spasi")
 		return
 	}
 
 	if len(user.Password) < 8 {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "Password Minimal 8 Karakter")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "password minimal 8 karakter")
 		return
 	}
 
