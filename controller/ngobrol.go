@@ -22,7 +22,7 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
     }
 
     if chat.Prompt == "" {
-        helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Tidak Valid", "masukin pertanyaan dulu ya kak 🤗")
+        helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Tidak Valid", "masukin pertanyaan dulu ya kakak 🤗")
         return
     }
 
@@ -66,7 +66,7 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
     labelToQA, err := helper.LoadDatasetGCS(bucketName, objectName)
     if err != nil {
-        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "ada kesalahan server: tidak bisa memuat dataset: "+err.Error())
+        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: tidak bisa memuat dataset: "+err.Error())
         return
     }
 
