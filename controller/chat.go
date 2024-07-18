@@ -62,3 +62,17 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 			helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: "+response.String())
 			return
 		}
+
+		   // Handle the expected nested array structure
+		   var nestedData [][]map[string]interface{}
+		   err = json.Unmarshal([]byte(response.String()), &nestedData)
+		   if err != nil {
+			   helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error decoding response: "+err.Error()+" | Server HF Response: "+response.String())
+			   return
+		   }
+	   
+		   // Flatten the nested array structure
+		   var flatData []map[string]interface{}
+		   for _, d := range nestedData {
+			   flatData = append(flatData, d...)
+		   }
