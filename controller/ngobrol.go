@@ -26,9 +26,9 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
         return
     }
 
-    bucketName := config.Getenv("GCS_BUCKET_NAME")
-    vocabObjectName := config.Getenv("GCS_VOCAB_FILE")
-    tokenizerConfigName := config.Getenv("GCS_TOKENIZER_CONFIG_FILE")
+    bucketName := config.GetEnv("GCS_BUCKET_NAME")
+    vocabObjectName := config.GetEnv("GCS_VOCAB_FILE")
+    tokenizerConfigName := config.GetEnv("GCS_TOKENIZER_CONFIG_FILE")
 
     // Read and use the tokenizer
 	vocab, err := helper.ReadVocabFromGCS(bucketName, vocabObjectName)
@@ -61,8 +61,8 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 	}
 
     // Load the dataset from GCS
-    bucketName = config.Getenv("GCS_BUCKET_NAME")
-    objectName := config.Getenv("GCS_OBJECT_NAME")
+    bucketName = config.GetEnv("GCS_BUCKET_NAME")
+    objectName := config.GetEnv("GCS_OBJECT_NAME")
 
     labelToQA, err := helper.LoadDatasetGCS(bucketName, objectName)
     if err != nil {
