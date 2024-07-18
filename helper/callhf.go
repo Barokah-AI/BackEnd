@@ -12,8 +12,8 @@ import (
 )
 
 func CallHuggingFaceAPI(prompt string) (string, float64, error) {
-    apiUrl := config.Getenv("HUGGINGFACE_API_URL")
-    apiToken := "Bearer " + config.Getenv("HUGGINGFACE_API_KEY")
+    apiUrl := config.GetEnv("HUGGINGFACE_API_URL")
+    apiToken := "Bearer " + config.GetEnv("HUGGINGFACE_API_KEY")
 
     reqBody := model.HFRequest{Inputs: prompt}
     jsonReqBody, err := json.Marshal(reqBody)
