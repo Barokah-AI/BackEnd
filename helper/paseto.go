@@ -31,12 +31,12 @@ func Encode(id primitive.ObjectID, email, privateKey string) (string, error) {
 func Decode(publicKey string, tokenstring string) (payload Payload, err error) {
 	var token *paseto.Token
 	var pubKey paseto.V4AsymmetricPublicKey
-	pubKey, err = paseto.NewV4AsymmetricPublicKeyFromHex(publicKey) // this wil fail if given key in an invalid format
+	pubKey, err = paseto.NewV4AsymmetricPublicKeyFromHex(publicKey) 
 	if err != nil {
 		return payload, fmt.Errorf("Decode NewV4AsymmetricPublicKeyFromHex : %v", err)
 	}
-	parser := paseto.NewParser()                                // only used because this example token has expired, use NewParser() (which checks expiry by default)
-	token, err = parser.ParseV4Public(pubKey, tokenstring, nil) // this will fail if parsing failes, cryptographic checks fail, or validation rules fail
+	parser := paseto.NewParser()                                
+	token, err = parser.ParseV4Public(pubKey, tokenstring, nil) 
 	if err != nil {
 		return payload, fmt.Errorf("Decode ParseV4Public : %v", err)
 	}
@@ -45,8 +45,8 @@ func Decode(publicKey string, tokenstring string) (payload Payload, err error) {
 }
 
 func GenerateKey() (privateKey, publicKey string) {
-	secretKey := paseto.NewV4AsymmetricSecretKey() // don't share this!!!
-	publicKey = secretKey.Public().ExportHex()     // DO share this one
+	secretKey := paseto.NewV4AsymmetricSecretKey() 
+	publicKey = secretKey.Public().ExportHex()    
 	privateKey = secretKey.ExportHex()
 	return privateKey, publicKey
 }
