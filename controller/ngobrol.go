@@ -48,3 +48,13 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "error saat melakukan tokenisasi: "+err.Error())
 		return
 	}
+
+	// Convert tokens to string for API call
+	tokensStr := strings.Trim(strings.Join(strings.Fields(fmt.Sprint(tokens)), " "), "[]")
+
+	// Call Hugging Face API with tokenized prompt
+	label, score, err := helper.CallHuggingFaceAPI(tokensStr)
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "model sedang diload: "+err.Error())
+		return
+	}
