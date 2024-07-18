@@ -58,3 +58,14 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "model sedang diload: "+err.Error())
 		return
 	}
+
+	  // Load the dataset from GCS
+	  bucketName = config.GetEnv("GCS_BUCKET_NAME")
+	  objectName := config.GetEnv("GCS_OBJECT_NAME")
+  
+	  labelToQA, err := helper.LoadDatasetGCS(bucketName, objectName)
+	  if err != nil {
+		  helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: tidak bisa memuat dataset: "+err.Error())
+		  return
+	  }
+  
