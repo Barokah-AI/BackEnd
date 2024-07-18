@@ -17,12 +17,12 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
     err := json.NewDecoder(req.Body).Decode(&chat)
     if err != nil {
-        helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Tidak Valid 404", "error saat membaca isi permintaan: "+err.Error())
+        helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Tidak Valid", "error saat membaca isi permintaan: "+err.Error())
         return
     }
 
     if chat.Prompt == "" {
-        helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Tidak Valid 404", "masukin pertanyaan dulu ya kakak 🤗")
+        helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Tidak Valid", "masukin pertanyaan dulu ya kak 🤗")
         return
     }
 
@@ -33,13 +33,13 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
     // Read and use the tokenizer
 	vocab, err := helper.ReadVocabFromGCS(bucketName, vocabObjectName)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak dapat membaca vocab: "+err.Error())
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "maaf tidak dapat membaca vocab: "+err.Error())
 		return
 	}
 
 	tokenizerConfig, err := helper.ReadTokenizerConfigFromGCS(bucketName, tokenizerConfigName)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak dapat membaca konfigurasi tokenizer: "+err.Error())
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "maaf tidak dapat membaca konfigurasi tokenizer: "+err.Error())
 		return
 	}
 
