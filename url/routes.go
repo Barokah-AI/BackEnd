@@ -17,7 +17,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	switch {
 	case method == "GET" && path == "/":
 		Home(w, r)
-	case method == "POST" && path == "/chat":
+	case method == "POST" && path == "/hat":
 		controller.Chat(w, r, config.GetEnv("HUGGINGFACE_API_KEY"))
 	case method == "POST" && path == "/ngobrol":
 		controller.Ngobrol(w, r, config.GetEnv("HUGGINGFACE_API_KEY"))
@@ -33,7 +33,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 func Home(respw http.ResponseWriter, req *http.Request) {
 	resp := map[string]string{
 		"github_repo": "https://github.com/barokah-ai/backend",
-		"message":     "Insyallah Berkah hehe 🤞",
+		"message":     "Insyallah Berkah 🤞",
 	}
 	helper.WriteJSON(respw, http.StatusOK, resp)
 }
