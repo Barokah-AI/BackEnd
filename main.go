@@ -6,6 +6,7 @@ import (
 	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
 )
 
+// Fungsi init akan dipanggil ketika package ini diinisialisasi
 func init() {
 	functions.HTTP("WebHook", routes.URL)
 }
