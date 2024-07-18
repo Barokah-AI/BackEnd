@@ -42,3 +42,9 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 		 helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak bisa membaca konfigurasi tokenizer: "+err.Error())
 		 return
 	 }
+
+	 tokens, err := helper.Tokenize2(chat.Prompt, vocab, tokenizerConfig)
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "error saat melakukan tokenisasi: "+err.Error())
+		return
+	}
