@@ -79,10 +79,10 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
     answer := record[1]
 
-    // helper.WriteJSON(respw, http.StatusOK, map[string]string{
-    //     "prompt":   chat.Prompt,
-    //     "response": answer,
-    //     "label":    label,
-    //     "score":    strconv.FormatFloat(score, 'f', -1, 64),
-    // })
+    helper.WriteJSON(respw, http.StatusOK, map[string]string{
+        "prompt":   chat.Prompt,
+        "response": answer,
+        "label":    label,
+        "score":    strconv.FormatFloat(score, 'f', -1, 64),
+    })
 }
