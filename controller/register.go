@@ -28,7 +28,7 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 
 	// check if user data is empty
 	if user.NamaLengkap == "" || user.Email == "" || user.Password == "" || user.Confirmpassword == "" {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "Mohon Untuk Melengkapi Datanya Ya")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "Mohon untuk melengkapi datanya ya")
 		return
 	}
 
