@@ -47,7 +47,7 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
     // Periksa jika model sedang dimuat
 	if response.StatusCode() == http.StatusServiceUnavailable {
-		helper.ErrorResponse(respw, req, http.StatusServiceUnavailable, "Internal Server Error", "Model sedang dimuat, coba lagi sebentar ya kakak 🙏 | HF Response: "+response.String())
+		helper.ErrorResponse(respw, req, http.StatusServiceUnavailable, "Internal Server Error", "Model sedang dimuat, coba lagi sebentar ya 🙏 | HF Response: "+response.String())
 		return
 	}
 
@@ -96,14 +96,14 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
         labelToQA, err := helper.LoadDatasetGCS(bucketName, objectName)
         if err != nil {
-            helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "server error: could not load dataset: "+err.Error())
+            helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error: could not load dataset: "+err.Error())
             return
         }
 
         // Get the answer corresponding to the best label
         record, ok := labelToQA[bestLabel]
         if !ok {
-            helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "server error: label not found in dataset")
+            helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "error: label not found in dataset")
             return
         }
 
