@@ -29,8 +29,8 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
     client := resty.New()
 
     // Hugging Face API URL dan token
-    apiUrl := config.Getenv("HUGGINGFACE_API_URL")
-    apiToken := "Bearer " + config.Getenv("HUGGINGFACE_API_KEY")
+    apiUrl := config.GetEnv("HUGGINGFACE_API_URL")
+    apiToken := "Bearer " + config.GetEnv("HUGGINGFACE_API_KEY")
 
     response, err := client.R().
         SetHeader("Authorization", apiToken).
@@ -91,8 +91,8 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
     if bestLabel != "" {
         // Load the dataset from GCS
-        bucketName := config.Getenv("GCS_BUCKET_NAME")
-        objectName := config.Getenv("GCS_DATASET_FILE")
+        bucketName := config.GetEnv("GCS_BUCKET_NAME")
+        objectName := config.GetEnv("GCS_DATASET_FILE")
 
         labelToQA, err := helper.LoadDatasetGCS(bucketName, objectName)
         if err != nil {
