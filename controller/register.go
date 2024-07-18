@@ -20,17 +20,17 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 	var user model.User
 
 	// error handling
-	err := json.NewDecoder(req.Body).Decode(&user)
-	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
-		return
-	}
+	// err := json.NewDecoder(req.Body).Decode(&user)
+	// if err != nil {
+	// 	helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
+	// 	return
+	// }
 
 	// check if user data is empty
-	if user.NamaLengkap == "" || user.Email == "" || user.Password == "" || user.Confirmpassword == "" {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data")
-		return
-	}
+	// if user.NamaLengkap == "" || user.Email == "" || user.Password == "" || user.Confirmpassword == "" {
+	// 	helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data")
+	// 	return
+	// }
 
 	// check if email is valid
 	if err := checkmail.ValidateFormat(user.Email); err != nil {
