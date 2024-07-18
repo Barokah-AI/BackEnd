@@ -26,7 +26,7 @@ func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, pri
 
 	// check if email and password is empty
 	if user.Email == "" || user.Password == "" {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mzohon untuk melengkapi data")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data")
 		return
 	}
 
