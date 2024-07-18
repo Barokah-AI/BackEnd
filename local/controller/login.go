@@ -31,17 +31,17 @@ func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, pri
 	}
 
 	// check if email is valid
-	// if err = checkmail.ValidateFormat(user.Email); err != nil {
-	// 	helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email tidak valid")
-	// 	return
-	// }
+	if err = checkmail.ValidateFormat(user.Email); err != nil {
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email tidak valid")
+		return
+	}
 
 	// check if email exists
-	// existsDoc, err := helper.GetUserFromEmail(user.Email, db)
-	// if err != nil {
-	// 	helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : get email " + err.Error())
-	// 	return
-	// }
+	existsDoc, err := helper.GetUserFromEmail(user.Email, db)
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : get email " + err.Error())
+		return
+	}
 
 	// check if password is correct
 	salt, err := hex.DecodeString(existsDoc.Salt)
