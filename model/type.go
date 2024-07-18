@@ -29,14 +29,14 @@ type AIRequest struct {
 }
 
 // Struct untuk membaca request dari Hugging Face API
-// type HFRequest struct {
-//     Inputs string `json:"inputs"`
-// }
+type HFRequest struct {
+    Inputs string `json:"inputs"`
+}
 
-// type HFResponse struct {
-//     Label string  `json:"label"`
-//     Score float64 `json:"score"`
-// }
+type HFResponse struct {
+    Label string  `json:"label"`
+    Score float64 `json:"score"`
+}
 
 // Struct untuk membaca tokenizer_config.json
 type TokenizerConfig struct {
