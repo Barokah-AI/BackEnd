@@ -20,11 +20,11 @@ func MongoConnect(mconn DBInfo) (db *mongo.Database, err error) {
 	return client.Database(mconn.DBName), nil
 }
 
-var MongoString string = GetEnv("MONGOSTRING")
+// var MongoString string = GetEnv("MONGOSTRING")
 
-var mongoinfo = DBInfo{
-	DBString: MongoString,
-	DBName:   "db_barokah",
-}
+// var mongoinfo = DBInfo{
+// 	DBString: MongoString,
+// 	DBName:   "db_barokah",
+// }
 
-var Mongoconn, ErrorMongoconn = MongoConnect(mongoinfo)
+// var Mongoconn, ErrorMongoconn = MongoConnect(mongoinfo)
