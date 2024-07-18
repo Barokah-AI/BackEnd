@@ -76,3 +76,15 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 		   for _, d := range nestedData {
 			   flatData = append(flatData, d...)
 		   }
+
+		     // Extracting the highest scoring label from the model output
+    var bestLabel string
+    var highestScore float64
+    for _, item := range flatData {
+        label, labelOk := item["label"].(string)
+        score, scoreOk := item["score"].(float64)
+        if labelOk && scoreOk && (bestLabel == "" || score > highestScore) {
+            bestLabel = label
+            highestScore = score
+        }
+    }
