@@ -49,3 +49,10 @@ func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, pri
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : salt")
 		return
 	}
+
+	// compare password
+	hash := argon2.IDKey([]byte(user.Password), salt, 1, 64*1024, 4, 32)
+	if hex.EncodeToString(hash) != existsDoc.Password {
+		helper.ErrorResponse(respw, req, http.StatusUnauthorized, "Unauthorized", "password salah")
+		return
+	}
