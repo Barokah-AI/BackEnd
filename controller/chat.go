@@ -53,7 +53,7 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
     // Periksa jika model tidak ditemukan
     if response.StatusCode() == http.StatusNotFound {
-        helper.ErrorResponse(respw, req, http.StatusNotFound, "Not Found", "Model tidak ditemukan | HF Response: "+response.String())
+        helper.ErrorResponse(respw, req, http.StatusNotFound, "Not Found", "Model Tidak Ditemukan | HF Response: "+response.String())
         return
     }
 
@@ -96,14 +96,14 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
         labelToQA, err := helper.LoadDatasetGCS(bucketName, objectName)
         if err != nil {
-            helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "server error: could not load dataset: "+err.Error())
+            helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "server error: Could Not Load Dataset: "+err.Error())
             return
         }
 
         // Get the answer corresponding to the best label
         record, ok := labelToQA[bestLabel]
         if !ok {
-            helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "server error: label not found in dataset")
+            helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "server error: Label Not Found in Dataset")
             return
         }
 
@@ -116,7 +116,7 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
             "score":    strconv.FormatFloat(highestScore, 'f', -1, 64),
         })
     } else {
-        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : response")
+        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "Kesalahan Server : response")
     }
 }
 
