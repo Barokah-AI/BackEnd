@@ -40,16 +40,16 @@ func CallHuggingFaceAPI(prompt string) (string, float64, error) {
         return "", 0, fmt.Errorf("unexpected status code from Hugging Face API: %d | Server HF Response: %s", resp.StatusCode, string(bodyBytes))
     }
 
-    var hfResponse []model.HFResponse
-    err = json.NewDecoder(resp.Body).Decode(&hfResponse)
-    if err != nil {
-        return "", 0, fmt.Errorf("error decoding response: %v", err)
-    }
+    // var hfResponse []model.HFResponse
+    // err = json.NewDecoder(resp.Body).Decode(&hfResponse)
+    // if err != nil {
+    //     return "", 0, fmt.Errorf("error decoding response: %v", err)
+    // }
 
-    if len(hfResponse) == 0 {
-        return "", 0, fmt.Errorf("empty response from Hugging Face API")
-    }
+    // if len(hfResponse) == 0 {
+    //     return "", 0, fmt.Errorf("empty response from Hugging Face API")
+    // }
 
-    bestResponse := hfResponse[0]
-    return bestResponse.Label, bestResponse.Score, nil
+    // bestResponse := hfResponse[0]
+    // return bestResponse.Label, bestResponse.Score, nil
 }
