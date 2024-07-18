@@ -28,13 +28,13 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 
 	// check if user data is empty
 	if user.NamaLengkap == "" || user.Email == "" || user.Password == "" || user.Confirmpassword == "" {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi datanya ya")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "Mohon Untuk Melengkapi Datanya Ya")
 		return
 	}
 
 	// check if email is valid
 	if err := checkmail.ValidateFormat(user.Email); err != nil {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "emailnya tidak valid")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "Emailnya Tidak Valid")
 		return
 	}
 
@@ -47,13 +47,13 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 
 	// check if password and confirm password match
 	if strings.Contains(user.Password, " ") {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "passwordnya tidak boleh mengandung spasi")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "Passwordnya Tidak Boleh Mengandung Spasi")
 		return
 	}
 
 	// check if password is at least 8 characters
 	if len(user.Password) < 8 {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "passwordnya minimal 8 karakter")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "Passwordnya Minimal 8 karakter")
 		return
 	}
 
@@ -61,7 +61,7 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 	salt := make([]byte, 16)
 	_, err = rand.Read(salt)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : salt")
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "Kesalahan Server : salt")
 		return
 	}
 
@@ -79,13 +79,13 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 	// check if user data is empty
 	insertedID, err := helper.InsertOneDoc(db, col, userData)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : insert data, "+err.Error())
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "Kesalahan Server : insert data, "+err.Error())
 		return
 	}
 
 	// response
 	resp := map[string]any{
-		"message":    "berhasil mendaftar akun",
+		"message":    "Berhasil Mendaftar Akun",
 		"insertedID": insertedID,
 		"data": map[string]string{
 			"email": user.Email,
