@@ -29,3 +29,9 @@ func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, pri
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data")
 		return
 	}
+
+	// check if email is valid
+	if err = checkmail.ValidateFormat(user.Email); err != nil {
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email tidak valid")
+		return
+	}
