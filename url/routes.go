@@ -18,13 +18,13 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	case method == "GET" && path == "/":
 		Home(w, r)
 	case method == "POST" && path == "/chat":
-		controller.Chat(w, r, config.GetEnv("HUGGINGFACE_API_KEY"))
+		controller.Chat(w, r, config.Getenv("HUGGINGFACE_API_KEY"))
 	case method == "POST" && path == "/ngobrol":
-		controller.Ngobrol(w, r, config.GetEnv("HUGGINGFACE_API_KEY"))
+		controller.Ngobrol(w, r, config.Getenv("HUGGINGFACE_API_KEY"))
 	case method == "POST" && path == "/signup":
 		controller.SignUp(config.Mongoconn, "users", w, r)
 	case method == "POST" && path == "/login":
-		controller.LogIn(config.Mongoconn, w, r, config.GetEnv("PASETOPRIVATEKEY"))
+		controller.LogIn(config.Mongoconn, w, r, config.Getenv("PASETOPRIVATEKEY"))
 	default:
 		helper.ErrorResponse(w, r, http.StatusNotFound, "Not Found", "The requested resource was not found")
 	}
