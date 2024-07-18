@@ -20,3 +20,8 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
         helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Tidak Valid", "error saat membaca isi permintaan: "+err.Error())
         return
     }
+
+	if chat.Prompt == "" {
+        helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Tidak Valid", "masukin pertanyaan dulu ya kakak 🤗")
+        return
+    }
