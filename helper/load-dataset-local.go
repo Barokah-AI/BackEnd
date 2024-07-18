@@ -23,14 +23,14 @@ func LoadDatasetLocal(filePath string) (map[string][]string, error) {
 		return nil, fmt.Errorf("failed to read dataset file: %v", err)
 	}
 
-	// labelToQA := make(map[string][]string)
-	// for i, record := range records {
-	// 	if len(record) != 2 {
-	// 		log.Printf("Skipping invalid record at line %d: %v\n", i+1, record)
-	// 		continue
-	// 	}
-	// 	label := "LABEL_" + strconv.Itoa(i)
-	// 	labelToQA[label] = record
-	// }
-	// return labelToQA, nil
+	labelToQA := make(map[string][]string)
+	for i, record := range records {
+		if len(record) != 2 {
+			log.Printf("Skipping invalid record at line %d: %v\n", i+1, record)
+			continue
+		}
+		label := "LABEL_" + strconv.Itoa(i)
+		labelToQA[label] = record
+	}
+	return labelToQA, nil
 }
