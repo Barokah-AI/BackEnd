@@ -105,3 +105,5 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 					 helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "server error: label not found in dataset")
 					 return
 				 }
+
+				 answer := record[1]
