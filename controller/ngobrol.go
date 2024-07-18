@@ -31,23 +31,23 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
     tokenizerConfigName := config.GetEnv("GCS_TOKENIZER_CONFIG_FILE")
 
     // Read and use the tokenizer
-	// vocab, err := helper.ReadVocabFromGCS(bucketName, vocabObjectName)
-	// if err != nil {
-	// 	helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak dapat membaca vocab: "+err.Error())
-	// 	return
-	// }
+	vocab, err := helper.ReadVocabFromGCS(bucketName, vocabObjectName)
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak dapat membaca vocab: "+err.Error())
+		return
+	}
 
-	// tokenizerConfig, err := helper.ReadTokenizerConfigFromGCS(bucketName, tokenizerConfigName)
-	// if err != nil {
-	// 	helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak dapat membaca konfigurasi tokenizer: "+err.Error())
-	// 	return
-	// }
+	tokenizerConfig, err := helper.ReadTokenizerConfigFromGCS(bucketName, tokenizerConfigName)
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak dapat membaca konfigurasi tokenizer: "+err.Error())
+		return
+	}
 
-	// tokens, err := helper.Tokenize2(chat.Prompt, vocab, tokenizerConfig)
-	// if err != nil {
-	// 	helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "error ketika melakukan tokenisasi: "+err.Error())
-	// 	return
-	// }
+	tokens, err := helper.Tokenize2(chat.Prompt, vocab, tokenizerConfig)
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "error ketika melakukan tokenisasi: "+err.Error())
+		return
+	}
 
 
 	// Convert tokens to string for API call
@@ -79,10 +79,10 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
     answer := record[1]
 
-    helper.WriteJSON(respw, http.StatusOK, map[string]string{
-        "prompt":   chat.Prompt,
-        "response": answer,
-        "label":    label,
-        "score":    strconv.FormatFloat(score, 'f', -1, 64),
-    })
+    // helper.WriteJSON(respw, http.StatusOK, map[string]string{
+    //     "prompt":   chat.Prompt,
+    //     "response": answer,
+    //     "label":    label,
+    //     "score":    strconv.FormatFloat(score, 'f', -1, 64),
+    // })
 }
