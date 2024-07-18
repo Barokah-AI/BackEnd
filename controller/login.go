@@ -42,3 +42,10 @@ func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, pri
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : get email " + err.Error())
 		return
 	}
+
+	// check if password is correct
+	salt, err := hex.DecodeString(existsDoc.Salt)
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : salt")
+		return
+	}
