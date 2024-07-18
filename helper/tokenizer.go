@@ -39,20 +39,20 @@ func ReadVocabFromGCS(bucketName, fileName string) (map[string]int, error) {
 }
 
 // Fungsi untuk membaca tokenizer config dari GCS
-func ReadTokenizerConfigFromGCS(bucketName, fileName string) (map[string]interface{}, error) {
-	data, err := ReadFileFromGCS(bucketName, fileName)
-	if err != nil {
-		return nil, err
-	}
+// func ReadTokenizerConfigFromGCS(bucketName, fileName string) (map[string]interface{}, error) {
+// 	data, err := ReadFileFromGCS(bucketName, fileName)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	var config map[string]interface{}
-	err = json.Unmarshal(data, &config)
-	if err != nil {
-		return nil, fmt.Errorf("error unmarshalling tokenizer config: %v", err)
-	}
+// 	var config map[string]interface{}
+// 	err = json.Unmarshal(data, &config)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("error unmarshalling tokenizer config: %v", err)
+// 	}
 
-	return config, nil
-}
+// 	return config, nil
+// }
 
 // Baca file vocab.txt dan return map dari kata ke index
 func ReadVocab(filePath string) (map[string]int, error) {
