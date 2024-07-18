@@ -13,3 +13,13 @@ var Origins = []string{
 	"http://127.0.0.1:5503",
 	"https://barokah-ai.vercel.app",
 }
+
+// Fungsi untuk memeriksa apakah origin diizinkan
+func isAllowedOrigin(origin string) bool {
+	for _, o := range Origins {
+		if o == origin {
+			return true
+		}
+	}
+	return false
+}
