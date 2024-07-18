@@ -1,17 +1,15 @@
 package controller
 
-// import (
-// 	"encoding/hex"
-// 	"encoding/json"
-// 	"net/http"
+import (
+	"encoding/hex"
+	"encoding/json"
+	"net/http"
 
-// 	"github.com/badoux/checkmail"
-// 	"go.mongodb.org/mongo-driver/mongo"
-// 	"golang.org/x/crypto/argon2"
-
-// 	"github.com/Barokah-AI/BackEnd/helper"
-// 	"github.com/Barokah-AI/BackEnd/model"
-// )
+	"github.com/Barokah-AI/BackEnd/model"
+	"github.com/badoux/checkmail"
+	"go.mongodb.org/mongo-driver/mongo"
+	"golang.org/x/crypto/argon2"
+)
 
 // user
 func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, privatekey string) {
@@ -20,7 +18,7 @@ func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, pri
 
 	// error handling
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error parsing request body " + err.Error())
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
 		return
 	}
 
@@ -39,7 +37,7 @@ func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, pri
 	// check if email exists
 	existsDoc, err := helper.GetUserFromEmail(user.Email, db)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : get email " + err.Error())
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : get email "+err.Error())
 		return
 	}
 
@@ -63,3 +61,16 @@ func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, pri
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : token")
 		return
 	}
+
+	// response
+	resp := map[string]any{
+		"status":  "success",
+		"message": "login berhasil",
+		"token":   tokenstring,
+		"data": map[string]string{
+			"email":       existsDoc.Email,
+			"namalengkap": existsDoc.NamaLengkap,
+		},
+	}
+	helper.WriteJSON(respw, http.StatusOK, resp)
+}
