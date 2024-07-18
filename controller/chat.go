@@ -99,3 +99,9 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 					helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "server error: could not load dataset: "+err.Error())
 					return
 				}
+				 // Get the answer corresponding to the best label
+				 record, ok := labelToQA[bestLabel]
+				 if !ok {
+					 helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "server error: label not found in dataset")
+					 return
+				 }
