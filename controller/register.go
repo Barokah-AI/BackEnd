@@ -52,10 +52,10 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 	}
 
 	// check if password is at least 8 characters
-	// if len(user.Password) < 8 {
-	// 	helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "password minimal 8 karakter ya kak")
-	// 	return
-	// }
+	if len(user.Password) < 8 {
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "password minimal 8 karakter ya kak")
+		return
+	}
 
 	// check if password and confirm password match
 	salt := make([]byte, 16)
