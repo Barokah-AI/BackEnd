@@ -71,18 +71,18 @@ func Ngobrol(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
     }
 
     // Get the answer corresponding to the best label
-    // record, ok := labelToQA[label]
-    // if !ok {
-    //     helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Ini Kesalahan Server Internal", "kesalahan server: label tidak ditemukan dalam dataset")
-    //     return
-    // }
+    record, ok := labelToQA[label]
+    if !ok {
+        helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Ini Kesalahan Server Internal", "kesalahan server: label tidak ditemukan dalam dataset")
+        return
+    }
 
-    // answer := record[1]
+    answer := record[1]
 
-    // helper.WriteJSON(respw, http.StatusOK, map[string]string{
-    //     "prompt":   chat.Prompt,
-    //     "response": answer,
-    //     "label":    label,
-    //     "score":    strconv.FormatFloat(score, 'f', -1, 64),
-    // })
+    helper.WriteJSON(respw, http.StatusOK, map[string]string{
+        "prompt":   chat.Prompt,
+        "response": answer,
+        "label":    label,
+        "score":    strconv.FormatFloat(score, 'f', -1, 64),
+    })
 }
