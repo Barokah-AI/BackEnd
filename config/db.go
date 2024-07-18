@@ -21,3 +21,8 @@ func MongoConnect(mconn DBInfo) (db *mongo.Database, err error) {
 }
 
 var MongoString string = GetEnv("MONGOSTRING")
+
+var mongoinfo = DBInfo{
+	DBString: MongoString,
+	DBName:   "db_barokah",
+}
