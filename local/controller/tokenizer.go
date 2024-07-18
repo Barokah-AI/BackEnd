@@ -11,7 +11,7 @@ import (
 )
 
 // Baca file vocab.txt dan return map dari kata ke index
-func readVocab(filePath string) (map[string]int, error) {
+func ReadVocab(filePath string) (map[string]int, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open vocab file: %v", err)
