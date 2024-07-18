@@ -26,13 +26,13 @@ func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, pri
 
 	// check if email and password is empty
 	if user.Email == "" || user.Password == "" {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "Mohon Untuk Melengkapi Data")
 		return
 	}
 
 	// check if email is valid
 	if err = checkmail.ValidateFormat(user.Email); err != nil {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email tidak valid")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "Email Tidak Valid")
 		return
 	}
 
