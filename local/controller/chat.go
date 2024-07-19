@@ -52,17 +52,17 @@ func callHuggingFaceAPI(prompt string) (string, float64, error) {
 	fmt.Println("HF API Response:", responseBody) // Print the raw response
 
 	// Handle the expected nested array structure
-	var nestedData [][]map[string]interface{}
-	err = json.Unmarshal(bodyBytes, &nestedData)
-	if err != nil {
-		return "", 0, fmt.Errorf("error decoding response: %v | Server HF Response: %s", err, responseBody)
-	}
+	// var nestedData [][]map[string]interface{}
+	// err = json.Unmarshal(bodyBytes, &nestedData)
+	// if err != nil {
+	// 	return "", 0, fmt.Errorf("error decoding response: %v | Server HF Response: %s", err, responseBody)
+	// }
 
-	// Flatten the nested array structure
-	var flatData []map[string]interface{}
-	for _, d := range nestedData {
-		flatData = append(flatData, d...)
-	}
+	// // Flatten the nested array structure
+	// var flatData []map[string]interface{}
+	// for _, d := range nestedData {
+	// 	flatData = append(flatData, d...)
+	// }
 
 	// Check if the flat data has at least one element
 	if len(flatData) == 0 {
