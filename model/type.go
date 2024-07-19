@@ -15,18 +15,18 @@ type User struct {
 	Salt            string             `bson:"salt,omitempty" json:"salt,omitempty"`
 }
 
-type Password struct {
-	Password        string `bson:"password,omitempty" json:"password,omitempty"`
-	Newpassword     string `bson:"newpass,omitempty" json:"newpass,omitempty"`
-	Confirmpassword string `bson:"confirmpass,omitempty" json:"confirmpass,omitempty"`
-}
+// type Password struct {
+// 	Password        string `bson:"password,omitempty" json:"password,omitempty"`
+// 	Newpassword     string `bson:"newpass,omitempty" json:"newpass,omitempty"`
+// 	Confirmpassword string `bson:"confirmpass,omitempty" json:"confirmpass,omitempty"`
+// }
 
-// Struct untuk membaca request dari user
-type AIRequest struct {
-	Prompt   	    string             `bson:"prompt,omitempty" json:"prompt,omitempty"`
-	AIResp          string             `bson:"airesp,omitempty" json:"airesp,omitempty"`
-	CreatedAt       time.Time          `bson:"created_at,omitempty" json:"created_at,omitempty"`
-}
+// // Struct untuk membaca request dari user
+// type AIRequest struct {
+// 	Prompt   	    string             `bson:"prompt,omitempty" json:"prompt,omitempty"`
+// 	AIResp          string             `bson:"airesp,omitempty" json:"airesp,omitempty"`
+// 	CreatedAt       time.Time          `bson:"created_at,omitempty" json:"created_at,omitempty"`
+// }
 
 // Struct untuk membaca request dari Hugging Face API
 type HFRequest struct {
