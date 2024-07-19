@@ -58,11 +58,11 @@ func LogIn(db *mongo.Database, respw http.ResponseWriter, req *http.Request, pri
 	}
 
 	// generate token
-	// tokenstring, err := helper.Encode(user.ID, user.Email, privatekey)
-	// if err != nil {
-	// 	helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : token")
-	// 	return
-	// }
+	tokenstring, err := helper.Encode(user.ID, user.Email, privatekey)
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : token")
+		return
+	}
 
 	// response
 	resp := map[string]any{
