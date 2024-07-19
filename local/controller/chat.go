@@ -31,17 +31,17 @@ func callHuggingFaceAPI(prompt string) (string, float64, error) {
 	req.Header.Set("Authorization", apiToken)
 	req.Header.Set("Content-Type", "application/json")
 
-	// client := &http.Client{}
-	// resp, err := client.Do(req)
-	// if err != nil {
-	// 	return "", 0, fmt.Errorf("error making request to Hugging Face API: %v", err)
-	// }
-	// defer resp.Body.Close()
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", 0, fmt.Errorf("error making request to Hugging Face API: %v", err)
+	}
+	defer resp.Body.Close()
 
-	// if resp.StatusCode != http.StatusOK {
-	// 	bodyBytes, _ := io.ReadAll(resp.Body)
-	// 	return "", 0, fmt.Errorf("unexpected status code from Hugging Face API: %d | Server HF Response: %s", resp.StatusCode, string(bodyBytes))
-	// }
+	if resp.StatusCode != http.StatusOK {
+		bodyBytes, _ := io.ReadAll(resp.Body)
+		return "", 0, fmt.Errorf("unexpected status code from Hugging Face API: %d | Server HF Response: %s", resp.StatusCode, string(bodyBytes))
+	}
 
 	// Read and print the response body
 	bodyBytes, err := io.ReadAll(resp.Body)
