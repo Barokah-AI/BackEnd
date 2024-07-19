@@ -18,18 +18,18 @@ func ReadFileFromGCS(bucketName, fileName string) ([]byte, error) {
 	}
 	defer client.Close()
 
-	bucket := client.Bucket(bucketName)
-	obj := bucket.Object(fileName)
-	r, err := obj.NewReader(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create reader: %v", err)
-	}
-	defer r.Close()
+	// bucket := client.Bucket(bucketName)
+	// obj := bucket.Object(fileName)
+	// r, err := obj.NewReader(ctx)
+	// if err != nil {
+	// 	return nil, fmt.Errorf("failed to create reader: %v", err)
+	// }
+	// defer r.Close()
 
-	data, err := io.ReadAll(r)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read data: %v", err)
-	}
+	// data, err := io.ReadAll(r)
+	// if err != nil {
+	// 	return nil, fmt.Errorf("failed to read data: %v", err)
+	// }
 
-	return data, nil
+	// return data, nil
 }
