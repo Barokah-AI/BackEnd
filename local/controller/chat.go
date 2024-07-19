@@ -44,12 +44,12 @@ func callHuggingFaceAPI(prompt string) (string, float64, error) {
 	}
 
 	// Read and print the response body
-	// bodyBytes, err := io.ReadAll(resp.Body)
-	// if err != nil {
-	// 	return "", 0, fmt.Errorf("error reading response body: %v", err)
-	// }
-	// responseBody := string(bodyBytes)
-	// fmt.Println("HF API Response:", responseBody) // Print the raw response
+	bodyBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", 0, fmt.Errorf("error reading response body: %v", err)
+	}
+	responseBody := string(bodyBytes)
+	fmt.Println("HF API Response:", responseBody) // Print the raw response
 
 	// Handle the expected nested array structure
 	var nestedData [][]map[string]interface{}
