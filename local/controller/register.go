@@ -51,14 +51,14 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 		return
 	}
 
-	salt := make([]byte, 16)
-	_, err = rand.Read(salt)
-	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : salt")
-		return
-	}
+	// salt := make([]byte, 16)
+	// _, err = rand.Read(salt)
+	// if err != nil {
+	// 	helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : salt")
+	// 	return
+	// }
 
-	hashedPassword := argon2.IDKey([]byte(user.Password), salt, 1, 64*1024, 4, 32)
+	// hashedPassword := argon2.IDKey([]byte(user.Password), salt, 1, 64*1024, 4, 32)
 
 	userData := bson.M{
 		"namalengkap": user.NamaLengkap,
