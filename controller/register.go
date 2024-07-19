@@ -39,17 +39,17 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 	}
 
 	// check if email already exists
-	// userExists, _ := helper.GetUserFromEmail(user.Email, db)
-	// if user.Email == userExists.Email {
-	// 	helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email sudah terdaftar")
-	// 	return
-	// }
+	userExists, _ := helper.GetUserFromEmail(user.Email, db)
+	if user.Email == userExists.Email {
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email sudah terdaftar")
+		return
+	}
 
-	// // check if password and confirm password match
-	// if strings.Contains(user.Password, " ") {
-	// 	helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "password tidak boleh mengandung spasi")
-	// 	return
-	// }
+	// check if password and confirm password match
+	if strings.Contains(user.Password, " ") {
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "password tidak boleh mengandung spasi")
+		return
+	}
 
 	// check if password is at least 8 characters
 	if len(user.Password) < 8 {
