@@ -62,3 +62,6 @@ func GetUserFromID(_id primitive.ObjectID, db *mongo.Database) (doc model.User, 
 	filter := bson.M{"_id": _id}
 	err = collection.FindOne(context.TODO(), filter).Decode(&doc)
 	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return doc, fmt.Errorf("no data found for ID %s", _id)
+		}
