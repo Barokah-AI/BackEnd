@@ -61,3 +61,4 @@ func GetUserFromID(_id primitive.ObjectID, db *mongo.Database) (doc model.User, 
 	collection := db.Collection("users")
 	filter := bson.M{"_id": _id}
 	err = collection.FindOne(context.TODO(), filter).Decode(&doc)
+	if err != nil {
