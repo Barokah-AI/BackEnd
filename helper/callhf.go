@@ -35,10 +35,10 @@ func CallHuggingFaceAPI(prompt string) (string, float64, error) {
     }
     defer resp.Body.Close()
 
-    if resp.StatusCode != http.StatusOK {
-        bodyBytes, _ := ioutil.ReadAll(resp.Body)
-        return "", 0, fmt.Errorf("unexpected status code from Hugging Face API: %d | Server HF Response: %s", resp.StatusCode, string(bodyBytes))
-    }
+    // if resp.StatusCode != http.StatusOK {
+    //     bodyBytes, _ := ioutil.ReadAll(resp.Body)
+    //     return "", 0, fmt.Errorf("unexpected status code from Hugging Face API: %d | Server HF Response: %s", resp.StatusCode, string(bodyBytes))
+    // }
 
     var hfResponse []model.HFResponse
     err = json.NewDecoder(resp.Body).Decode(&hfResponse)
