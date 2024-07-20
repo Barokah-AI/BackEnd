@@ -25,3 +25,8 @@ func InsertOneDoc(db *mongo.Database, col string, doc any) (insertedID primitive
 	}
 	return result.InsertedID.(primitive.ObjectID), nil
 }
+
+func GetUserFromEmail(email string, db *mongo.Database) (doc model.User, err error) {
+	collection := db.Collection("users")
+	filter := bson.M{"email": email}
+	err = collection.FindOne(context.TODO(), filter).Decode(&doc)
