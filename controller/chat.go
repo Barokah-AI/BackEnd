@@ -29,18 +29,18 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
     client := resty.New()
 
     // Hugging Face API URL dan token
-    apiUrl := config.GetEnv("HUGGINGFACE_API_URL")
-    apiToken := "Bearer " + config.GetEnv("HUGGINGFACE_API_KEY")
+    // apiUrl := config.GetEnv("HUGGINGFACE_API_URL")
+    // apiToken := "Bearer " + config.GetEnv("HUGGINGFACE_API_KEY")
 
-    response, err := client.R().
-        SetHeader("Authorization", apiToken).
-        SetHeader("Content-Type", "application/json").
-        SetBody(`{"inputs": "` + chat.Prompt + `"}`).
-        Post(apiUrl)
+    // response, err := client.R().
+    //     SetHeader("Authorization", apiToken).
+    //     SetHeader("Content-Type", "application/json").
+    //     SetBody(`{"inputs": "` + chat.Prompt + `"}`).
+    //     Post(apiUrl)
 
-    if err != nil {
-        log.Fatalf("This is Error making request: %v", err)
-    }
+    // if err != nil {
+    //     log.Fatalf("This is Error making request: %v", err)
+    // }
 
     // Log response body
     // log.Printf("Response from Hugging Face API: %s", response.String())
