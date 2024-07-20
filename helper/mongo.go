@@ -65,3 +65,5 @@ func GetUserFromID(_id primitive.ObjectID, db *mongo.Database) (doc model.User, 
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			return doc, fmt.Errorf("no data found for ID %s", _id)
 		}
+		return doc, fmt.Errorf("error retrieving data for ID %s: %s", _id, err.Error())
+	}
