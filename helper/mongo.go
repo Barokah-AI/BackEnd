@@ -2,6 +2,7 @@ package helper
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/Barokah-AI/BackEnd/model"
@@ -67,3 +68,5 @@ func GetUserFromID(_id primitive.ObjectID, db *mongo.Database) (doc model.User, 
 		}
 		return doc, fmt.Errorf("error retrieving data for ID %s: %s", _id, err.Error())
 	}
+	return doc, nil
+}
