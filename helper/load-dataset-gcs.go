@@ -15,13 +15,13 @@ func LoadDatasetGCS(bucketName, objectName string) (map[string][]string, error) 
         return nil, fmt.Errorf("failed to read dataset file: %v", err)
     }
 
-    // r := bytes.NewReader(data)
-    // reader := csv.NewReader(r)
-    // reader.Comma = '|' // Set the delimiter to pipe
-    // records, err := reader.ReadAll()
-    // if err != nil {
-    //     return nil, fmt.Errorf("failed to read dataset file: %v", err)
-    // }
+    r := bytes.NewReader(data)
+    reader := csv.NewReader(r)
+    reader.Comma = '|' // Set the delimiter to pipe
+    records, err := reader.ReadAll()
+    if err != nil {
+        return nil, fmt.Errorf("failed to read dataset file: %v", err)
+    }
 
     labelToQA := make(map[string][]string)
     for i, record := range records {
