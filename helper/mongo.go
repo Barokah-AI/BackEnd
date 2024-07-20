@@ -14,9 +14,6 @@ import (
 // import (
 // 	"context"
 // 	"errors"
-// 	"fmt"
-
-// 	"github.com/Barokah-AI/BackEnd/model"
 
 func InsertOneDoc(db *mongo.Database, col string, doc any) (insertedID primitive.ObjectID, err error) {
 	result, err := db.Collection(col).InsertOne(context.Background(), doc)
