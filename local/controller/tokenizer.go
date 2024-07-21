@@ -11,27 +11,27 @@ import (
 )
 
 // Baca file vocab.txt dan return map dari kata ke index
-func readVocab(filePath string) (map[string]int, error) {
-	file, err := os.Open(filePath)
-	if err != nil {
-		return nil, fmt.Errorf("failed to open vocab file: %v", err)
-	}
-	defer file.Close()
+// func readVocab(filePath string) (map[string]int, error) {
+// 	file, err := os.Open(filePath)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("failed to open vocab file: %v", err)
+// 	}
+// 	defer file.Close()
 
-	vocab := make(map[string]int)
-	scanner := bufio.NewScanner(file)
-	index := 0
-	for scanner.Scan() {
-		vocab[scanner.Text()] = index
-		index++
-	}
+// 	vocab := make(map[string]int)
+// 	scanner := bufio.NewScanner(file)
+// 	index := 0
+// 	for scanner.Scan() {
+// 		vocab[scanner.Text()] = index
+// 		index++
+// 	}
 
-	if err := scanner.Err(); err != nil {
-		return nil, fmt.Errorf("error reading vocab file: %v", err)
-	}
+// 	if err := scanner.Err(); err != nil {
+// 		return nil, fmt.Errorf("error reading vocab file: %v", err)
+// 	}
 
-	return vocab, nil
-}
+// 	return vocab, nil
+// }
 
 // Baca file tokenizer_config.json dan return struct konfigurasi
 func readTokenizerConfig(filePath string) (*model.TokenizerConfig, error) {
