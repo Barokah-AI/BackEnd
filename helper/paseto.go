@@ -42,3 +42,5 @@ func Decode(publicKey string, tokenstring string) (payload Payload, err error) {
 	if err != nil {
 		return payload, fmt.Errorf("Decode NewV4AsymmetricPublicKeyFromHex : %v", err)
 	}
+	parser := paseto.NewParser()                                // only used because this example token has expired, use NewParser() (which checks expiry by default)
+	token, err = parser.ParseV4Public(pubKey, tokenstring, nil) // this will fail if parsing failes, cryptographic checks fail, or validation rules fail
