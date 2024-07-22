@@ -34,3 +34,7 @@ func Encode(id primitive.ObjectID, email, privateKey string) (string, error) {
 	secretKey, err := paseto.NewV4AsymmetricSecretKeyFromHex(privateKey)
 	return token.V4Sign(secretKey, nil), err
 }
+
+func Decode(publicKey string, tokenstring string) (payload Payload, err error) {
+	var token *paseto.Token
+	var pubKey paseto.V4AsymmetricPublicKey
