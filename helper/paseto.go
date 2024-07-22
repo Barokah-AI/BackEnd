@@ -3,6 +3,7 @@ package helper
 import (
 	"time"
 
+	"aidanwoods.dev/go-paseto"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -31,3 +32,5 @@ func Encode(id primitive.ObjectID, email, privateKey string) (string, error) {
 	token.Set("id", id)
 	token.SetString("email", email)
 	secretKey, err := paseto.NewV4AsymmetricSecretKeyFromHex(privateKey)
+	return token.V4Sign(secretKey, nil), err
+}
