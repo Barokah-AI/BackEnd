@@ -52,3 +52,5 @@ func Decode(publicKey string, tokenstring string) (payload Payload, err error) {
 	err = json.Unmarshal(token.ClaimsJSON(), &payload)
 	return payload, err
 }
+
+func GenerateKey() (privateKey, publicKey string) {
