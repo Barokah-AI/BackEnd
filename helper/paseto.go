@@ -38,3 +38,7 @@ func Encode(id primitive.ObjectID, email, privateKey string) (string, error) {
 func Decode(publicKey string, tokenstring string) (payload Payload, err error) {
 	var token *paseto.Token
 	var pubKey paseto.V4AsymmetricPublicKey
+	pubKey, err = paseto.NewV4AsymmetricPublicKeyFromHex(publicKey) // this wil fail if given key in an invalid format
+	if err != nil {
+		return payload, fmt.Errorf("Decode NewV4AsymmetricPublicKeyFromHex : %v", err)
+	}
