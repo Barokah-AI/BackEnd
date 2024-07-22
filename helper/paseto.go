@@ -54,3 +54,8 @@ func Decode(publicKey string, tokenstring string) (payload Payload, err error) {
 }
 
 func GenerateKey() (privateKey, publicKey string) {
+	secretKey := paseto.NewV4AsymmetricSecretKey() // don't share this!!!
+	publicKey = secretKey.Public().ExportHex()     // DO share this one
+	privateKey = secretKey.ExportHex()
+	return privateKey, publicKey
+}
