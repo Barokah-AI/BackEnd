@@ -22,3 +22,7 @@ type Payload struct {
 	Iat   time.Time          `json:"iat"`
 	Nbf   time.Time          `json:"nbf"`
 }
+
+func Encode(id primitive.ObjectID, email, privateKey string) (string, error) {
+	token := paseto.NewToken()
+	token.SetIssuedAt(time.Now())
