@@ -1,6 +1,8 @@
 package helper
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 
 	"aidanwoods.dev/go-paseto"
@@ -47,3 +49,6 @@ func Decode(publicKey string, tokenstring string) (payload Payload, err error) {
 	if err != nil {
 		return payload, fmt.Errorf("Decode ParseV4Public : %v", err)
 	}
+	err = json.Unmarshal(token.ClaimsJSON(), &payload)
+	return payload, err
+}
