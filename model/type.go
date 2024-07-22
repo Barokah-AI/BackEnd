@@ -33,20 +33,20 @@ type HFRequest struct {
     Inputs string `json:"inputs"`
 }
 
-// type HFResponse struct {
-//     Label string  `json:"label"`
-//     Score float64 `json:"score"`
-// }
+type HFResponse struct {
+    Label string  `json:"label"`
+    Score float64 `json:"score"`
+}
 
-// // Struct untuk membaca tokenizer_config.json
-// type TokenizerConfig struct {
-// 	DoLowerCase   bool   `json:"do_lower_case"`
-// 	ClsToken      string `json:"cls_token"`
-// 	PadToken      string `json:"pad_token"`
-// 	SepToken      string `json:"sep_token"`
-// 	MaskToken     string `json:"mask_token"`
-// 	UnkToken      string `json:"unk_token"`
-// }
+// Struct untuk membaca tokenizer_config.json
+type TokenizerConfig struct {
+	DoLowerCase   bool   `json:"do_lower_case"`
+	ClsToken      string `json:"cls_token"`
+	PadToken      string `json:"pad_token"`
+	SepToken      string `json:"sep_token"`
+	MaskToken     string `json:"mask_token"`
+	UnkToken      string `json:"unk_token"`
+}
 
 type Credential struct {
 	Status  int    `json:"status" bson:"status"`
