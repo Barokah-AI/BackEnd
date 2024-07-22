@@ -1,5 +1,11 @@
 package helper
 
+import (
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
+
 // import (
 // 	"encoding/json"
 // 	"fmt"
@@ -14,3 +20,5 @@ type Payload struct {
 	Email string             `json:"email"`
 	Exp   time.Time          `json:"exp"`
 	Iat   time.Time          `json:"iat"`
+	Nbf   time.Time          `json:"nbf"`
+}
