@@ -12,3 +12,5 @@ package helper
 type Payload struct {
 	Id    primitive.ObjectID `json:"id"`
 	Email string             `json:"email"`
+	Exp   time.Time          `json:"exp"`
+	Iat   time.Time          `json:"iat"`
