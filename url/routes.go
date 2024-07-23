@@ -30,10 +30,10 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func Home(respw http.ResponseWriter, req *http.Request) {
-	resp := map[string]string{
-		"github_repo": "https://github.com/barokah-ai/backend",
-		"message":     "Insyallah Berkah 🤞",
-	}
-	helper.WriteJSON(respw, http.StatusOK, resp)
-}
+// func Home(respw http.ResponseWriter, req *http.Request) {
+// 	resp := map[string]string{
+// 		"github_repo": "https://github.com/barokah-ai/backend",
+// 		"message":     "Insyallah Berkah 🤞",
+// 	}
+// 	helper.WriteJSON(respw, http.StatusOK, resp)
+// }
