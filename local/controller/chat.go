@@ -95,12 +95,12 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 
 	err := json.NewDecoder(req.Body).Decode(&chat)
 	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Kamu Tidak Valid", "error saat membaca isi permintaan: "+err.Error())
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Tidak Valid", "error saat membaca isi permintaan: "+err.Error())
 		return
 	}
 
 	if chat.Prompt == "" {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Kamu Tidak Valid", "masukin pertanyaan dulu ya kakak 🤗")
+		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Permintaan Tidak Valid", "masukin pertanyaan dulu ya kakak 🤗")
 		return
 	}
 
