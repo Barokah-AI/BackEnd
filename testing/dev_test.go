@@ -1,58 +1,68 @@
-package BackEnd_test
+package model
 
 import (
-	"testing"
-
-	"github.com/Barokah-AI/BackEnd/config"
-	helper "github.com/Barokah-AI/BackEnd/helper"
-	// controller "github.com/Barokah-AI/BackEnd/local/controller"
-	
+	"time"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// var db = config.MongoConnect("MONGOSTRING", "db_barokah")
-
-func TestGenerateKey(t *testing.T) {
-	privateKey, publicKey := helper.GenerateKey()
-	t.Logf("PrivateKey : %v", privateKey)
-	t.Logf("PublicKey : %v", publicKey)
+// Struct User
+type User struct {
+	ID              primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	NamaLengkap     string             `bson:"namalengkap,omitempty" json:"namalengkap,omitempty"`
+	Email           string             `bson:"email,omitempty" json:"email,omitempty"`
+	Password        string             `bson:"password,omitempty" json:"password,omitempty"`
+	Confirmpassword string             `bson:"confirmpass,omitempty" json:"confirmpass,omitempty"`
+	Salt            string             `bson:"salt,omitempty" json:"salt,omitempty"`
 }
 
-// TestInsertOneDoc
-func TestInsertOneDoc(t *testing.T) {
-	var data = map[string]interface{}{
-		"username": "teeamai",
-		"password": "12345",
-	}
-	insertedDoc, err := helper.InsertOneDoc(config.Mongoconn, "users", data)
-	if err != nil {
-		t.Errorf("Error : %v", err)
-	}
-	t.Logf("InsertedDoc : %v", insertedDoc)
+type Password struct {
+	Password        string `bson:"password,omitempty" json:"password,omitempty"`
+	Newpassword     string `bson:"newpass,omitempty" json:"newpass,omitempty"`
+	Confirmpassword string `bson:"confirmpass,omitempty" json:"confirmpass,omitempty"`
 }
 
-// func TestSignUp(t *testing.T) {
-// 	// var db = config.MongoConnect
-// 	var doc model.User
-// 	doc.NamaLengkap = "Fedhira Syaila"
-// 	doc.Email = "pedped@gmail.com"
-// 	doc.Password = "pedi12345"
-// 	doc.Confirmpassword = "pedi12345"
-// 	email, err := controller.SignUp(config.Mongoconn, "user", doc)
-// 	if err != nil {
-// 		t.Errorf("Error inserting document: %v", err)
-// 	} else {
-// 		fmt.Println("Data berhasil disimpan dengan email:", email)
-// 	}
-// }
+// Struct untuk membaca request dari user
+type AIRequest struct {
+	Prompt   	    string             `bson:"prompt,omitempty" json:"prompt,omitempty"`
+	AIResp          string             `bson:"airesp,omitempty" json:"airesp,omitempty"`
+	CreatedAt       time.Time          `bson:"created_at,omitempty" json:"created_at,omitempty"`
+}
 
-// func TestLogIn(t *testing.T) {
-// 	var user model.User
-// 	user.Email = "pedped@gmail.com"
-// 	user.Password = "pedi12345"
-// 	user, err := controller.LogIn(db, user)
-// 	if err != nil {
-// 		fmt.Println(err)
-// 	} else {
-// 		fmt.Println("Berhasil LogIn : ", user.Email)
-// 	}
-// }
+// Struct untuk membaca request dari Hugging Face API
+type HFRequest struct {
+    Inputs string `json:"inputs"`
+}
+
+type HFResponse struct {
+    Label string  `json:"label"`
+    Score float64 `json:"score"`
+}
+
+// Struct untuk membaca tokenizer_config.json
+type TokenizerConfig struct {
+	DoLowerCase   bool   `json:"do_lower_case"`
+	ClsToken      string `json:"cls_token"`
+	PadToken      string `json:"pad_token"`
+	SepToken      string `json:"sep_token"`
+	MaskToken     string `json:"mask_token"`
+	UnkToken      string `json:"unk_token"`
+}
+
+type Credential struct {
+	Status  int    `json:"status" bson:"status"`
+	Token   string `json:"token,omitempty" bson:"token,omitempty"`
+	Message string `json:"message,omitempty" bson:"message,omitempty"`
+}
+
+type Response struct {
+	Status  int    `json:"status" bson:"status"`
+	Message string `json:"message,omitempty" bson:"message,omitempty"`
+}
+
+type Payload struct {
+	Id    primitive.ObjectID `json:"id"`
+	Email string             `json:"email"`
+	Exp   time.Time          `json:"exp"`
+	Iat   time.Time          `json:"iat"`
+	Nbf   time.Time          `json:"nbf"`
+}
