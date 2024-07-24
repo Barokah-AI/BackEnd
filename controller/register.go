@@ -51,19 +51,19 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 		return
 	}
 
-	// check if password is at least 8 characters
-	if len(user.Password) < 8 {
-		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "password minimal 8 karakter")
-		return
-	}
+	// // check if password is at least 8 characters
+	// if len(user.Password) < 8 {
+	// 	helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "password minimal 8 karakter")
+	// 	return
+	// }
 
-	// check if password and confirm password match
-	salt := make([]byte, 16)
-	_, err = rand.Read(salt)
-	if err != nil {
-		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : salt")
-		return
-	}
+	// // check if password and confirm password match
+	// salt := make([]byte, 16)
+	// _, err = rand.Read(salt)
+	// if err != nil {
+	// 	helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : salt")
+	// 	return
+	// }
 
 	// hash password
 	hashedPassword := argon2.IDKey([]byte(user.Password), salt, 1, 64*1024, 4, 32)
