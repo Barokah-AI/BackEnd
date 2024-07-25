@@ -28,6 +28,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 		controller.Chat(w, r, config.GetEnv("HUGGINGFACE_API_KEY"))
 	// If method is POST and path is /signup, it will run SignUp function
 	case method == "POST" && path == "/signup":
+		// Call SignUp function from controller package
 		controller.SignUp(config.Mongoconn, "users", w, r)
 	case method == "POST" && path == "/login":
 		controller.LogIn(config.Mongoconn, w, r, config.GetEnv("PASETOPRIVATEKEY"))
