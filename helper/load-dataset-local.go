@@ -23,14 +23,14 @@ func LoadDatasetLocal(file_path string) (map[string][]string, error) {
 		return nil, fmt.Errorf("gagal dalam membaca file dataset: %v", err)
 	}
 
-	labelToQA := make(map[string][]string)
+	label_to_qa := make(map[string][]string)
 	for i, record := range records {
 		if len(record) != 2 {
 			log.Printf("Melewati record yang tidak valid pada baris %d: %v\n", i+1, record)
 			continue
 		}
 		label := "LABEL_" + strconv.Itoa(i)
-		labelToQA[label] = record
+		label_to_qa[label] = record
 	}
-	return labelToQA, nil
+	return label_to_qa, nil
 }
