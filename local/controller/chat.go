@@ -70,17 +70,17 @@ func callHuggingFaceAPI(prompt string) (string, float64, error) {
 	}
 
 	// Assume the first element contains the best response
-	bestResponse := flat_data[0]
+	best_response := flat_data[0]
 
 	// Extract label and score from the best response
-	label, ok := bestResponse["label"].(string)
+	label, ok := best_response["label"].(string)
 	if !ok {
 		return "", 0, fmt.Errorf("missing or invalid label in response: %s", response_body)
 	}
-	score, ok := bestResponse["score"].(float64)
+	score, ok := best_response["score"].(float64)
 	if !ok {
 		// Handle the case where the score might be an integer
-		if scoreInt, ok := bestResponse["score"].(int); ok {
+		if scoreInt, ok := best_response["score"].(int); ok {
 			score = float64(scoreInt)
 		} else {
 			return "", 0, fmt.Errorf("missing or invalid score in response: %s", response_body)
