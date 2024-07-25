@@ -27,11 +27,11 @@ func Ngobrol(respwrt http.ResponseWriter, req *http.Request, tokenmodel string) 
 	}
 
 	bucket_name := config.GetEnv("GCS_BUCKET_NAME")
-	vocabObjectName := config.GetEnv("GCS_VOCAB_FILE")
+	vocabObject_name := config.GetEnv("GCS_VOCAB_FILE")
 	tokenizerConfigName := config.GetEnv("GCS_TOKENIZER_CONFIG_FILE")
 
 	// Read and use the tokenizer
-	vocab, err := helper.ReadVocabFromGCS(bucket_name, vocabObjectName)
+	vocab, err := helper.ReadVocabFromGCS(bucket_name, vocabObject_name)
 	if err != nil {
 		helper.ErrorResponse(respwrt, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak bisa membaca vocab: "+err.Error())
 		return
@@ -61,9 +61,9 @@ func Ngobrol(respwrt http.ResponseWriter, req *http.Request, tokenmodel string) 
 
 	// Load the dataset from GCS
 	bucket_name = config.GetEnv("GCS_BUCKET_NAME")
-	objectName := config.GetEnv("GCS_OBJECT_NAME")
+	object_name := config.GetEnv("GCS_OBJECT_NAME")
 
-	labelToQA, err := helper.LoadDatasetGCS(bucket_name, objectName)
+	labelToQA, err := helper.LoadDatasetGCS(bucket_name, object_name)
 	if err != nil {
 		helper.ErrorResponse(respwrt, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: tidak bisa memuat dataset: "+err.Error())
 		return
