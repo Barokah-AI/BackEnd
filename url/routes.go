@@ -21,6 +21,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	// jika method POST dan path /chat maka akan menjalankan fungsi Chat
 	case method == "POST" && path == "/chat":
 		controller.Chat(w, r, config.GetEnv("HUGGINGFACE_API_KEY"))
+	// jika method POST dan path /ngobrol maka akan menjalankan fungsi Ngobrol
 	case method == "POST" && path == "/ngobrol":
 		controller.Ngobrol(w, r, config.GetEnv("HUGGINGFACE_API_KEY"))
 	case method == "POST" && path == "/signup":
