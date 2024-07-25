@@ -59,18 +59,18 @@ func callHuggingFaceAPI(prompt string) (string, float64, error) {
 	}
 
 	// Flatten the nested array structure
-	var flatData []map[string]interface{}
+	var flat_data []map[string]interface{}
 	for _, d := range nested_data {
-		flatData = append(flatData, d...)
+		flat_data = append(flat_data, d...)
 	}
 
 	// Check if the flat data has at least one element
-	if len(flatData) == 0 {
+	if len(flat_data) == 0 {
 		return "", 0, fmt.Errorf("empty response after flattening nested structure: %s", response_body)
 	}
 
 	// Assume the first element contains the best response
-	bestResponse := flatData[0]
+	bestResponse := flat_data[0]
 
 	// Extract label and score from the best response
 	label, ok := bestResponse["label"].(string)
