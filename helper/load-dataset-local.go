@@ -9,8 +9,8 @@ import (
 )
 
 // LoadDataset loads the dataset from the given CSV file and returns a map of label to question-answer pair
-func LoadDatasetLocal(filePath string) (map[string][]string, error) {
-	file, err := os.Open(filePath)
+func LoadDatasetLocal(file_ath string) (map[string][]string, error) {
+	file, err := os.Open(file_ath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open dataset file: %v", err)
 	}
