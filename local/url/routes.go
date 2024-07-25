@@ -36,6 +36,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 		controller.LogIn(config.Mongoconn, w, r, config.GetEnv("PASETOPRIVATEKEY"))
 	// If no path is found, it will respond with status 404
 	default:
+		// Call ErrorResponse function from helper package
 		helper.ErrorResponse(w, r, http.StatusNotFound, "Not Found", "The requested resource was not found")
 	}
 }
