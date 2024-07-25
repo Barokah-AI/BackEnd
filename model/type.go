@@ -58,6 +58,7 @@ type Credential struct {
 	Message string `json:"message,omitempty" bson:"message,omitempty"`
 }
 
+// Struct for Response
 type Response struct {
 	Status  int    `json:"status" bson:"status"`
 	Message string `json:"message,omitempty" bson:"message,omitempty"`
