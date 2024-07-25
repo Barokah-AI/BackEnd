@@ -51,6 +51,7 @@ type TokenizerConfig struct {
 	UnkToken    string `json:"unk_token"`
 }
 
+// Struct for Credential
 type Credential struct {
 	Status  int    `json:"status" bson:"status"`
 	Token   string `json:"token,omitempty" bson:"token,omitempty"`
