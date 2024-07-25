@@ -48,9 +48,9 @@ func GetAllDocs[T any](db *mongo.Database, col string, filter bson.M) (docs T, e
 }
 
 func GetUserFromID(_id primitive.ObjectID, db *mongo.Database) (doc model.User, err error) {
-	collection := db.Collection("users")
+	collections := db.Collection("users")
 	filter := bson.M{"_id": _id}
-	err = collection.FindOne(context.TODO(), filter).Decode(&doc)
+	err = collections.FindOne(context.TODO(), filter).Decode(&doc)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			return doc, fmt.Errorf("no data found for ID %s", _id)
