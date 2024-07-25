@@ -77,7 +77,7 @@ func SignUp(database *mongo.Database, col string, respw http.ResponseWriter, req
 	}
 
 	// check if user data is empty
-	insertedID, err := helper.InsertOneDoc(database, col, userData)
+	inserted_id, err := helper.InsertOneDoc(database, col, userData)
 	if err != nil {
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : insert data, "+err.Error())
 		return
@@ -86,7 +86,7 @@ func SignUp(database *mongo.Database, col string, respw http.ResponseWriter, req
 	// response
 	resp := map[string]any{
 		"message":    "berhasil mendaftar",
-		"insertedID": insertedID,
+		"insertedID": inserted_id,
 		"data": map[string]string{
 			"email": user.Email,
 		},
