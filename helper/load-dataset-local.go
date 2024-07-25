@@ -12,7 +12,7 @@ import (
 func LoadDatasetLocal(file_path string) (map[string][]string, error) {
 	file, err := os.Open(file_path)
 	if err != nil {
-		return nil, fmt.Errorf("failed to open dataset file: %v", err)
+		return nil, fmt.Errorf("gagal dalam membuka file dataset: %v", err)
 	}
 	defer file.Close()
 
