@@ -30,7 +30,7 @@ type AIRequest struct {
 	CreatedAt time.Time `bson:"created_at,omitempty" json:"created_at,omitempty"`
 }
 
-// Struct untuk membaca request dari Hugging Face API
+// Struct for AI Response from Hugging Face API
 type HFRequest struct {
 	Inputs string `json:"inputs"`
 }
