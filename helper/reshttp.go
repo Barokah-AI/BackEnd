@@ -21,9 +21,9 @@ func WriteJSON(respwd http.ResponseWriter, statusCode int, content any) {
 }
 
 func Jsonstr(strc any) string {
-	jsonData, err := json.Marshal(strc)
+	json_data, err := json.Marshal(strc)
 	if err != nil {
 		log.Fatal(err)
 	}
-	return string(jsonData)
+	return string(json_data)
 }
