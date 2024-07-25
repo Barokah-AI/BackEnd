@@ -9,8 +9,9 @@ import (
 )
 
 func URL(w http.ResponseWriter, r *http.Request) {
+	// Set access control headers for the response writer
 	if config.SetAccessControlHeaders(w, r) {
-		return // If it's a preflight request, return early.
+		return
 	}
 
 	var method, path string = r.Method, r.URL.Path
