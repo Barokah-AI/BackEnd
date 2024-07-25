@@ -53,7 +53,7 @@ func Ngobrol(respwrt http.ResponseWriter, req *http.Request, tokenmodel string) 
 	tokens_string := strings.Trim(strings.Join(strings.Fields(fmt.Sprint(tokens)), " "), "[]")
 
 	// Call Hugging Face API with tokenized prompt
-	label, score, err := helper.CallHuggingFaceAPI(tokens_string)
+	data_label, score, err := helper.CallHuggingFaceAPI(tokens_string)
 	if err != nil {
 		helper.ErrorResponse(respwrt, req, http.StatusInternalServerError, "Kesalahan Server Internal", "model sedang diload: "+err.Error())
 		return
@@ -70,7 +70,7 @@ func Ngobrol(respwrt http.ResponseWriter, req *http.Request, tokenmodel string) 
 	}
 
 	// Get the answer corresponding to the best label
-	record, ok := label_to_qa[label]
+	record, ok := label_to_qa[data_label]
 	if !ok {
 		helper.ErrorResponse(respwrt, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: label tidak ditemukan dalam dataset")
 		return
@@ -81,7 +81,7 @@ func Ngobrol(respwrt http.ResponseWriter, req *http.Request, tokenmodel string) 
 	helper.WriteJSON(respwrt, http.StatusOK, map[string]string{
 		"prompt":   chat.Prompt,
 		"response": answer,
-		"label":    label,
+		"label":    data_label,
 		"score":    strconv.FormatFloat(score, 'f', -1, 64),
 	})
 }
