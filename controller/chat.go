@@ -78,18 +78,18 @@ func Chat(respwd http.ResponseWriter, request *http.Request, tokenmodel string) 
 	}
 
 	// Extracting the highest scoring label from the model output
-	var bestLabel string
+	var best_label string
 	var highestScore float64
 	for _, item := range flatData {
 		label, labelOk := item["label"].(string)
 		score, scoreOk := item["score"].(float64)
-		if labelOk && scoreOk && (bestLabel == "" || score > highestScore) {
-			bestLabel = label
+		if labelOk && scoreOk && (best_label == "" || score > highestScore) {
+			best_label = label
 			highestScore = score
 		}
 	}
 
-	if bestLabel != "" {
+	if best_label != "" {
 		// Load the dataset from GCS
 		bucketName := config.GetEnv("GCS_BUCKET_NAME")
 		objectName := config.GetEnv("GCS_DATASET_FILE")
@@ -101,7 +101,7 @@ func Chat(respwd http.ResponseWriter, request *http.Request, tokenmodel string) 
 		}
 
 		// Get the answer corresponding to the best label
-		records, ok := label_to_qa[bestLabel]
+		records, ok := label_to_qa[best_label]
 		if !ok {
 			helper.ErrorResponse(respwd, request, http.StatusInternalServerError, "Internal Server Error", "server error: label not found in dataset")
 			return
@@ -112,7 +112,7 @@ func Chat(respwd http.ResponseWriter, request *http.Request, tokenmodel string) 
 		helper.WriteJSON(respwd, http.StatusOK, map[string]string{
 			"prompt":   chat.Prompt,
 			"response": answers,
-			"label":    bestLabel,
+			"label":    best_label,
 			"score":    strconv.FormatFloat(highestScore, 'f', -1, 64),
 		})
 	} else {
