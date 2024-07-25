@@ -39,8 +39,8 @@ func SignUp(database *mongo.Database, colection string, respwrt http.ResponseWri
 	}
 
 	// check if email already exists
-	userExists, _ := helper.GetUserFromEmail(user.Email, database)
-	if user.Email == userExists.Email {
+	user_exists, _ := helper.GetUserFromEmail(user.Email, database)
+	if user.Email == user_exists.Email {
 		helper.ErrorResponse(respwrt, request, http.StatusBadRequest, "Bad Request", "email sudah terdaftar")
 		return
 	}
