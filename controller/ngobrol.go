@@ -43,14 +43,14 @@ func Ngobrol(respwrt http.ResponseWriter, req *http.Request, tokenmodel string) 
 		return
 	}
 
-	tokens, err := helper.Tokenize2(chat.Prompt, vocab, tokenizerConfig)
+	token, err := helper.Tokenize2(chat.Prompt, vocab, tokenizerConfig)
 	if err != nil {
 		helper.ErrorResponse(respwrt, req, http.StatusInternalServerError, "Kesalahan Server Internal", "error saat melakukan tokenisasi: "+err.Error())
 		return
 	}
 
-	// Convert tokens to string for API call
-	tokens_string := strings.Trim(strings.Join(strings.Fields(fmt.Sprint(tokens)), " "), "[]")
+	// Convert token to string for API call
+	tokens_string := strings.Trim(strings.Join(strings.Fields(fmt.Sprint(token)), " "), "[]")
 
 	// Call Hugging Face API with tokenized prompt
 	data_label, score, err := helper.CallHuggingFaceAPI(tokens_string)
