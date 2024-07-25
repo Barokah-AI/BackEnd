@@ -94,14 +94,14 @@ func Chat(respwd http.ResponseWriter, request *http.Request, tokenmodel string) 
 		bucketName := config.GetEnv("GCS_BUCKET_NAME")
 		objectName := config.GetEnv("GCS_DATASET_FILE")
 
-		labelToQA, err := helper.LoadDatasetGCS(bucketName, objectName)
+		label_to_qa, err := helper.LoadDatasetGCS(bucketName, objectName)
 		if err != nil {
 			helper.ErrorResponse(respwd, request, http.StatusInternalServerError, "Internal Server Error", "server error: could not load dataset: "+err.Error())
 			return
 		}
 
 		// Get the answer corresponding to the best label
-		record, ok := labelToQA[bestLabel]
+		record, ok := label_to_qa[bestLabel]
 		if !ok {
 			helper.ErrorResponse(respwd, request, http.StatusInternalServerError, "Internal Server Error", "server error: label not found in dataset")
 			return
