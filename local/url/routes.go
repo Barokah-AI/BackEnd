@@ -23,6 +23,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 		// Call Home function
 		Home(w, r)
 	case method == "POST" && path == "/chat":
+		// Call Chat function from controller package
 		controller.Chat(w, r, config.GetEnv("HUGGINGFACE_API_KEY"))
 	case method == "POST" && path == "/signup":
 		controller.SignUp(config.Mongoconn, "users", w, r)
