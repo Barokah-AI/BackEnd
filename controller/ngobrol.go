@@ -54,6 +54,7 @@ func Ngobrol(respwrt http.ResponseWriter, req *http.Request, tokenmodel string) 
 
 	// Call Hugging Face API with tokenized prompt
 	data_label, score, err := helper.CallHuggingFaceAPI(tokens_string)
+	// jika error saat mengambil data dari API
 	if err != nil {
 		helper.ErrorResponse(respwrt, req, http.StatusInternalServerError, "Kesalahan Server Internal", "model sedang diload: "+err.Error())
 		return
