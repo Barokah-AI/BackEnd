@@ -1,5 +1,16 @@
 package controller
 
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+
+	"github.com/Barokah-AI/BackEnd/config"
+	"github.com/Barokah-AI/BackEnd/model"
+)
+
 // import (
 // 	"bytes"
 // 	"encoding/json"
@@ -79,3 +90,15 @@ func callHuggingFaceAPI(prompt string) (string, float64, error) {
 		return "", 0, fmt.Errorf("missing or invalid label in response: %s", responseBody)
 	}
 
+	score, ok := bestResponse["score"].(float64)
+	if !ok {
+		// Handle the case where the score might be an integer
+		if scoreInt, ok := bestResponse["score"].(int); ok {
+			score = float64(scoreInt)
+		} else {
+			return "", 0, fmt.Errorf("missing or invalid score in response: %s", responseBody)
+		}
+	}
+
+	return label, score, nil
+}
