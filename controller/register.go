@@ -16,7 +16,7 @@ import (
 	"github.com/Barokah-AI/BackEnd/model"
 )
 
-func SignUp(database *mongo.Database, col string, respwrt http.ResponseWriter, request *http.Request) {
+func SignUp(database *mongo.Database, colection string, respwrt http.ResponseWriter, request *http.Request) {
 	var user model.User
 
 	// error handling
@@ -77,7 +77,7 @@ func SignUp(database *mongo.Database, col string, respwrt http.ResponseWriter, r
 	}
 
 	// check if user data is empty
-	inserted_id, err := helper.InsertOneDoc(database, col, userData)
+	inserted_id, err := helper.InsertOneDoc(database, colection, userData)
 	if err != nil {
 		helper.ErrorResponse(respwrt, request, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : insert data, "+err.Error())
 		return
