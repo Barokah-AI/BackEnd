@@ -13,3 +13,14 @@ package controller
 // 	"github.com/Barokah-AI/BackEnd/helper"
 // 	"github.com/Barokah-AI/BackEnd/model"
 // )
+
+func callHuggingFaceAPI(prompt string) (string, float64, error) {
+	apiUrl := config.GetEnv("HUGGINGFACE_API_URL")
+	apiToken := "Bearer " + config.GetEnv("HUGGINGFACE_API_KEY")
+
+	reqBody := model.HFRequest{Inputs: prompt}
+	jsonReqBody, err := json.Marshal(reqBody)
+	if err != nil {
+		return "", 0, fmt.Errorf("error marshalling request body: %v", err)
+	}
+
