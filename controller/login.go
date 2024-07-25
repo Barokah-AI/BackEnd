@@ -58,7 +58,7 @@ func LogIn(db *mongo.Database, respwrt http.ResponseWriter, req *http.Request, p
 	}
 
 	// generate token
-	tokenstring, err := helper.Encode(user.ID, user.Email, privatekey)
+	token_string, err := helper.Encode(user.ID, user.Email, privatekey)
 	if err != nil {
 		helper.ErrorResponse(respwrt, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : token")
 		return
@@ -68,7 +68,7 @@ func LogIn(db *mongo.Database, respwrt http.ResponseWriter, req *http.Request, p
 	resp := map[string]any{
 		"status":  "success",
 		"message": "login berhasil",
-		"token":   tokenstring,
+		"token":   token_string,
 		"data": map[string]string{
 			"email":       exists_doc.Email,
 			"namalengkap": exists_doc.NamaLengkap,
