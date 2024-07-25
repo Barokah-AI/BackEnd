@@ -26,7 +26,7 @@ func LoadDatasetLocal(file_path string) (map[string][]string, error) {
 	labelToQA := make(map[string][]string)
 	for i, record := range records {
 		if len(record) != 2 {
-			log.Printf("Skipping invalid record at line %d: %v\n", i+1, record)
+			log.Printf("Melewati record yang tidak valid pada baris %d: %v\n", i+1, record)
 			continue
 		}
 		label := "LABEL_" + strconv.Itoa(i)
