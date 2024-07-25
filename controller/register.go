@@ -12,11 +12,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/argon2"
 
-	"github.com/Barokah-AI/BackEnd/model"
 	"github.com/Barokah-AI/BackEnd/helper"
+	"github.com/Barokah-AI/BackEnd/model"
 )
 
-func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http.Request) {
+func SignUp(database *mongo.Database, col string, respw http.ResponseWriter, req *http.Request) {
 	var user model.User
 
 	// error handling
@@ -39,7 +39,7 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 	}
 
 	// check if email already exists
-	userExists, _ := helper.GetUserFromEmail(user.Email, db)
+	userExists, _ := helper.GetUserFromEmail(user.Email, database)
 	if user.Email == userExists.Email {
 		helper.ErrorResponse(respw, req, http.StatusBadRequest, "Bad Request", "email sudah terdaftar")
 		return
@@ -77,7 +77,7 @@ func SignUp(db *mongo.Database, col string, respw http.ResponseWriter, req *http
 	}
 
 	// check if user data is empty
-	insertedID, err := helper.InsertOneDoc(db, col, userData)
+	insertedID, err := helper.InsertOneDoc(database, col, userData)
 	if err != nil {
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : insert data, "+err.Error())
 		return
