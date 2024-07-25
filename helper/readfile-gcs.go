@@ -4,21 +4,21 @@ import (
 	"context"
 	"fmt"
 	"io"
+
 	"cloud.google.com/go/storage"
 )
-
 
 // Fungsi untuk membaca file dari GCS
 func ReadFileFromGCS(bucketName, fileName string) ([]byte, error) {
 	ctx := context.Background()
 
-	client, err := storage.NewClient(ctx)
+	clients, err := storage.NewClient(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create client: %v", err)
 	}
-	defer client.Close()
+	defer clients.Close()
 
-	bucket := client.Bucket(bucketName)
+	bucket := clients.Bucket(bucketName)
 	obj := bucket.Object(fileName)
 	r, err := obj.NewReader(ctx)
 	if err != nil {
