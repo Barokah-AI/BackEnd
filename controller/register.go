@@ -16,44 +16,44 @@ import (
 	"github.com/Barokah-AI/BackEnd/model"
 )
 
-func SignUp(database *mongo.Database, col string, respwrt http.ResponseWriter, req *http.Request) {
+func SignUp(database *mongo.Database, col string, respwrt http.ResponseWriter, request *http.Request) {
 	var user model.User
 
 	// error handling
-	err := json.NewDecoder(req.Body).Decode(&user)
+	err := json.NewDecoder(request.Body).Decode(&user)
 	if err != nil {
-		helper.ErrorResponse(respwrt, req, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
+		helper.ErrorResponse(respwrt, request, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
 		return
 	}
 
 	// check if user data is empty
 	if user.NamaLengkap == "" || user.Email == "" || user.Password == "" || user.Confirmpassword == "" {
-		helper.ErrorResponse(respwrt, req, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data")
+		helper.ErrorResponse(respwrt, request, http.StatusBadRequest, "Bad Request", "mohon untuk melengkapi data")
 		return
 	}
 
 	// check if email is valid
 	if err := checkmail.ValidateFormat(user.Email); err != nil {
-		helper.ErrorResponse(respwrt, req, http.StatusBadRequest, "Bad Request", "email tidak valid")
+		helper.ErrorResponse(respwrt, request, http.StatusBadRequest, "Bad Request", "email tidak valid")
 		return
 	}
 
 	// check if email already exists
 	userExists, _ := helper.GetUserFromEmail(user.Email, database)
 	if user.Email == userExists.Email {
-		helper.ErrorResponse(respwrt, req, http.StatusBadRequest, "Bad Request", "email sudah terdaftar")
+		helper.ErrorResponse(respwrt, request, http.StatusBadRequest, "Bad Request", "email sudah terdaftar")
 		return
 	}
 
 	// check if password and confirm password match
 	if strings.Contains(user.Password, " ") {
-		helper.ErrorResponse(respwrt, req, http.StatusBadRequest, "Bad Request", "password tidak boleh mengandung spasi")
+		helper.ErrorResponse(respwrt, request, http.StatusBadRequest, "Bad Request", "password tidak boleh mengandung spasi")
 		return
 	}
 
 	// check if password is at least 8 characters
 	if len(user.Password) < 8 {
-		helper.ErrorResponse(respwrt, req, http.StatusBadRequest, "Bad Request", "password minimal 8 karakter")
+		helper.ErrorResponse(respwrt, request, http.StatusBadRequest, "Bad Request", "password minimal 8 karakter")
 		return
 	}
 
@@ -61,7 +61,7 @@ func SignUp(database *mongo.Database, col string, respwrt http.ResponseWriter, r
 	salt := make([]byte, 16)
 	_, err = rand.Read(salt)
 	if err != nil {
-		helper.ErrorResponse(respwrt, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : salt")
+		helper.ErrorResponse(respwrt, request, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : salt")
 		return
 	}
 
@@ -79,7 +79,7 @@ func SignUp(database *mongo.Database, col string, respwrt http.ResponseWriter, r
 	// check if user data is empty
 	inserted_id, err := helper.InsertOneDoc(database, col, userData)
 	if err != nil {
-		helper.ErrorResponse(respwrt, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : insert data, "+err.Error())
+		helper.ErrorResponse(respwrt, request, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : insert data, "+err.Error())
 		return
 	}
 
