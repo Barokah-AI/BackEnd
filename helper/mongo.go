@@ -35,12 +35,12 @@ func GetUserFromEmail(email string, db *mongo.Database) (doc model.User, err err
 func GetAllDocs[T any](db *mongo.Database, col string, filter bson.M) (docs T, err error) {
 	ctx := context.TODO()
 	collections := db.Collection(col)
-	cursor, err := collections.Find(ctx, filter)
+	cursors, err := collections.Find(ctx, filter)
 	if err != nil {
 		return
 	}
-	defer cursor.Close(ctx)
-	err = cursor.All(context.TODO(), &docs)
+	defer cursors.Close(ctx)
+	err = cursors.All(context.TODO(), &docs)
 	if err != nil {
 		return
 	}
