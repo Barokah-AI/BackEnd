@@ -37,14 +37,14 @@ func LogIn(db *mongo.Database, respwrt http.ResponseWriter, req *http.Request, p
 	}
 
 	// check if email exists
-	existsDoc, err := helper.GetUserFromEmail(user.Email, db)
+	exists_doc, err := helper.GetUserFromEmail(user.Email, db)
 	if err != nil {
 		helper.ErrorResponse(respwrt, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : get email "+err.Error())
 		return
 	}
 
 	// check if password is correct
-	salt, err := hex.DecodeString(existsDoc.Salt)
+	salt, err := hex.DecodeString(exists_doc.Salt)
 	if err != nil {
 		helper.ErrorResponse(respwrt, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : salt")
 		return
@@ -52,7 +52,7 @@ func LogIn(db *mongo.Database, respwrt http.ResponseWriter, req *http.Request, p
 
 	// compare password
 	hash := argon2.IDKey([]byte(user.Password), salt, 1, 64*1024, 4, 32)
-	if hex.EncodeToString(hash) != existsDoc.Password {
+	if hex.EncodeToString(hash) != exists_doc.Password {
 		helper.ErrorResponse(respwrt, req, http.StatusUnauthorized, "Unauthorized", "password salah")
 		return
 	}
@@ -70,8 +70,8 @@ func LogIn(db *mongo.Database, respwrt http.ResponseWriter, req *http.Request, p
 		"message": "login berhasil",
 		"token":   tokenstring,
 		"data": map[string]string{
-			"email":       existsDoc.Email,
-			"namalengkap": existsDoc.NamaLengkap,
+			"email":       exists_doc.Email,
+			"namalengkap": exists_doc.NamaLengkap,
 		},
 	}
 	helper.WriteJSON(respwrt, http.StatusOK, resp)
