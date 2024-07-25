@@ -16,7 +16,7 @@ import (
 
 func callHuggingFaceAPI(prompt string) (string, float64, error) {
 	apiUrl := config.GetEnv("HUGGINGFACE_API_URL")
-	apiToken := "Bearer " + config.GetEnv("HUGGINGFACE_API_KEY")
+	api_token := "Bearer " + config.GetEnv("HUGGINGFACE_API_KEY")
 
 	req_body := model.HFRequest{Inputs: prompt}
 	json_req_body, err := json.Marshal(req_body)
@@ -28,7 +28,7 @@ func callHuggingFaceAPI(prompt string) (string, float64, error) {
 	if err != nil {
 		return "", 0, fmt.Errorf("error creating request: %v", err)
 	}
-	req.Header.Set("Authorization", apiToken)
+	req.Header.Set("Authorization", api_token)
 	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{}
