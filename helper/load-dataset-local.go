@@ -29,8 +29,8 @@ func LoadDatasetLocal(file_path string) (map[string][]string, error) {
 			log.Printf("Melewati record yang tidak valid pada baris %d: %v\n", i+1, record)
 			continue
 		}
-		label := "LABEL_" + strconv.Itoa(i)
-		label_to_qa[label] = record
+		lbl := "LABEL_" + strconv.Itoa(i)
+		label_to_qa[lbl] = record
 	}
 	return label_to_qa, nil
 }
