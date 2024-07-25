@@ -84,12 +84,12 @@ func SignUp(database *mongo.Database, col string, respwrt http.ResponseWriter, r
 	}
 
 	// response
-	resp := map[string]any{
+	response := map[string]any{
 		"message":    "berhasil mendaftar",
 		"insertedID": inserted_id,
 		"data": map[string]string{
 			"email": user.Email,
 		},
 	}
-	helper.WriteJSON(respwrt, http.StatusCreated, resp)
+	helper.WriteJSON(respwrt, http.StatusCreated, response)
 }
