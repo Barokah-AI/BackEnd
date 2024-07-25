@@ -18,8 +18,8 @@ func ReadFileFromGCS(bucketName, fileName string) ([]byte, error) {
 	}
 	defer clients.Close()
 
-	bucket := clients.Bucket(bucketName)
-	obj := bucket.Object(fileName)
+	buckets := clients.Bucket(bucketName)
+	obj := buckets.Object(fileName)
 	r, err := obj.NewReader(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create reader: %v", err)
