@@ -48,14 +48,14 @@ func callHuggingFaceAPI(prompt string) (string, float64, error) {
 	if err != nil {
 		return "", 0, fmt.Errorf("error reading response body: %v", err)
 	}
-	responseBody := string(bodyBytes)
-	fmt.Println("HF API Response:", responseBody) // Print the raw response
+	response_body := string(bodyBytes)
+	fmt.Println("HF API Response:", response_body) // Print the raw response
 
 	// Handle the expected nested array structure
 	var nestedData [][]map[string]interface{}
 	err = json.Unmarshal(bodyBytes, &nestedData)
 	if err != nil {
-		return "", 0, fmt.Errorf("error decoding response: %v | Server HF Response: %s", err, responseBody)
+		return "", 0, fmt.Errorf("error decoding response: %v | Server HF Response: %s", err, response_body)
 	}
 
 	// Flatten the nested array structure
@@ -66,7 +66,7 @@ func callHuggingFaceAPI(prompt string) (string, float64, error) {
 
 	// Check if the flat data has at least one element
 	if len(flatData) == 0 {
-		return "", 0, fmt.Errorf("empty response after flattening nested structure: %s", responseBody)
+		return "", 0, fmt.Errorf("empty response after flattening nested structure: %s", response_body)
 	}
 
 	// Assume the first element contains the best response
@@ -75,7 +75,7 @@ func callHuggingFaceAPI(prompt string) (string, float64, error) {
 	// Extract label and score from the best response
 	label, ok := bestResponse["label"].(string)
 	if !ok {
-		return "", 0, fmt.Errorf("missing or invalid label in response: %s", responseBody)
+		return "", 0, fmt.Errorf("missing or invalid label in response: %s", response_body)
 	}
 	score, ok := bestResponse["score"].(float64)
 	if !ok {
@@ -83,7 +83,7 @@ func callHuggingFaceAPI(prompt string) (string, float64, error) {
 		if scoreInt, ok := bestResponse["score"].(int); ok {
 			score = float64(scoreInt)
 		} else {
-			return "", 0, fmt.Errorf("missing or invalid score in response: %s", responseBody)
+			return "", 0, fmt.Errorf("missing or invalid score in response: %s", response_body)
 		}
 	}
 
