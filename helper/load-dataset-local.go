@@ -9,10 +9,10 @@ import (
 )
 
 // LoadDataset loads the dataset from the given CSV file and returns a map of label to question-answer pair
-func LoadDatasetLocal(file_path string) (map[string][]string, error) {
-	file, err := os.Open(file_path)
+func LoadDatasetLocal(filePath string) (map[string][]string, error) {
+	file, err := os.Open(filePath)
 	if err != nil {
-		return nil, fmt.Errorf("gagal dalam membuka file dataset: %v", err)
+		return nil, fmt.Errorf("failed to open dataset file: %v", err)
 	}
 	defer file.Close()
 
@@ -20,17 +20,17 @@ func LoadDatasetLocal(file_path string) (map[string][]string, error) {
 	reader.Comma = '|' // Set the delimiter to pipe
 	records, err := reader.ReadAll()
 	if err != nil {
-		return nil, fmt.Errorf("gagal dalam membaca file dataset: %v", err)
+		return nil, fmt.Errorf("failed to read dataset file: %v", err)
 	}
 
-	label_to_qa := make(map[string][]string)
+	labelToQA := make(map[string][]string)
 	for i, record := range records {
 		if len(record) != 2 {
-			log.Printf("Melewati record yang tidak valid pada baris %d: %v\n", i+1, record)
+			log.Printf("Skipping invalid record at line %d: %v\n", i+1, record)
 			continue
 		}
-		lbl := "LABEL_" + strconv.Itoa(i)
-		label_to_qa[lbl] = record
+		label := "LABEL_" + strconv.Itoa(i)
+		labelToQA[label] = record
 	}
-	return label_to_qa, nil
+	return labelToQA, nil
 }
