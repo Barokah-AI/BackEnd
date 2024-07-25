@@ -64,6 +64,7 @@ type Response struct {
 	Message string `json:"message,omitempty" bson:"message,omitempty"`
 }
 
+// Struct for Payload
 type Payload struct {
 	Id    primitive.ObjectID `json:"id"`
 	Email string             `json:"email"`
