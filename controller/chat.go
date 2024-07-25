@@ -64,8 +64,8 @@ func Chat(respwd http.ResponseWriter, request *http.Request, tokenmodel string) 
 	}
 
 	// Handle the expected nested array structure
-	var nestedData [][]map[string]interface{}
-	err = json.Unmarshal([]byte(response.String()), &nestedData)
+	var nested_data [][]map[string]interface{}
+	err = json.Unmarshal([]byte(response.String()), &nested_data)
 	if err != nil {
 		helper.ErrorResponse(respwd, request, http.StatusInternalServerError, "Internal Server Error", "error decoding response: "+err.Error()+" | Server HF Response: "+response.String())
 		return
@@ -73,7 +73,7 @@ func Chat(respwd http.ResponseWriter, request *http.Request, tokenmodel string) 
 
 	// Flatten the nested array structure
 	var flatData []map[string]interface{}
-	for _, d := range nestedData {
+	for _, d := range nested_data {
 		flatData = append(flatData, d...)
 	}
 
