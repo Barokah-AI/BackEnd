@@ -134,8 +134,8 @@ func Chat(respwrt http.ResponseWriter, request *http.Request, token_model string
 	}
 
 	// Load the dataset
-	datasetPath := ("../dataset/barokah.csv")
-	label_to_qa, err := helper.LoadDatasetLocal(datasetPath)
+	dataset_path := ("../dataset/barokah.csv")
+	label_to_qa, err := helper.LoadDatasetLocal(dataset_path)
 	if err != nil {
 		helper.ErrorResponse(respwrt, request, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: tidak bisa memuat dataset: "+err.Error())
 		return
