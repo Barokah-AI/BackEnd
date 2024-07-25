@@ -28,7 +28,7 @@ func Ngobrol(respwrt http.ResponseWriter, req *http.Request, tokenmodel string) 
 
 	bucket_name := config.GetEnv("GCS_BUCKET_NAME")
 	vocab_object_name := config.GetEnv("GCS_VOCAB_FILE")
-	tokenizerConfigName := config.GetEnv("GCS_TOKENIZER_CONFIG_FILE")
+	tokenizer_config_name := config.GetEnv("GCS_TOKENIZER_CONFIG_FILE")
 
 	// Read and use the tokenizer
 	vocab, err := helper.ReadVocabFromGCS(bucket_name, vocab_object_name)
@@ -37,7 +37,7 @@ func Ngobrol(respwrt http.ResponseWriter, req *http.Request, tokenmodel string) 
 		return
 	}
 
-	tokenizerConfig, err := helper.ReadTokenizerConfigFromGCS(bucket_name, tokenizerConfigName)
+	tokenizerConfig, err := helper.ReadTokenizerConfigFromGCS(bucket_name, tokenizer_config_name)
 	if err != nil {
 		helper.ErrorResponse(respwrt, req, http.StatusInternalServerError, "Kesalahan Server Internal", "tidak bisa membaca konfigurasi tokenizer: "+err.Error())
 		return
