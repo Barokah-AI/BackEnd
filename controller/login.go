@@ -51,8 +51,8 @@ func LogIn(db *mongo.Database, respwrt http.ResponseWriter, req *http.Request, p
 	}
 
 	// compare password
-	hash := argon2.IDKey([]byte(user.Password), salt, 1, 64*1024, 4, 32)
-	if hex.EncodeToString(hash) != exists_doc.Password {
+	hashpwd := argon2.IDKey([]byte(user.Password), salt, 1, 64*1024, 4, 32)
+	if hex.EncodeToString(hashpwd) != exists_doc.Password {
 		helper.ErrorResponse(respwrt, req, http.StatusUnauthorized, "Unauthorized", "password salah")
 		return
 	}
