@@ -32,6 +32,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 		controller.SignUp(config.Mongoconn, "users", w, r)
 	// If method is POST and path is /login, it will run LogIn function
 	case method == "POST" && path == "/login":
+		// Call LogIn function from controller package
 		controller.LogIn(config.Mongoconn, w, r, config.GetEnv("PASETOPRIVATEKEY"))
 	default:
 		helper.ErrorResponse(w, r, http.StatusNotFound, "Not Found", "The requested resource was not found")
