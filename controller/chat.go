@@ -12,17 +12,17 @@ import (
 	"github.com/go-resty/resty/v2"
 )
 
-func Chat(respwd http.ResponseWriter, req *http.Request, tokenmodel string) {
+func Chat(respwd http.ResponseWriter, request *http.Request, tokenmodel string) {
 	var chat model.AIRequest
 
-	err := json.NewDecoder(req.Body).Decode(&chat)
+	err := json.NewDecoder(request.Body).Decode(&chat)
 	if err != nil {
-		helper.ErrorResponse(respwd, req, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
+		helper.ErrorResponse(respwd, request, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
 		return
 	}
 
 	if chat.Prompt == "" {
-		helper.ErrorResponse(respwd, req, http.StatusBadRequest, "Bad Request", "masukin pertanyaan dulu ya kakak 🤗")
+		helper.ErrorResponse(respwd, request, http.StatusBadRequest, "Bad Request", "masukin pertanyaan dulu ya kakak 🤗")
 		return
 	}
 
@@ -47,19 +47,19 @@ func Chat(respwd http.ResponseWriter, req *http.Request, tokenmodel string) {
 
 	// Periksa jika model sedang dimuat
 	if response.StatusCode() == http.StatusServiceUnavailable {
-		helper.ErrorResponse(respwd, req, http.StatusServiceUnavailable, "Internal Server Error", "Model sedang dimuat, coba lagi sebentar ya kakak 🙏 | HF Response: "+response.String())
+		helper.ErrorResponse(respwd, request, http.StatusServiceUnavailable, "Internal Server Error", "Model sedang dimuat, coba lagi sebentar ya kakak 🙏 | HF Response: "+response.String())
 		return
 	}
 
 	// Periksa jika model tidak ditemukan
 	if response.StatusCode() == http.StatusNotFound {
-		helper.ErrorResponse(respwd, req, http.StatusNotFound, "Not Found", "Model tidak ditemukan | HF Response: "+response.String())
+		helper.ErrorResponse(respwd, request, http.StatusNotFound, "Not Found", "Model tidak ditemukan | HF Response: "+response.String())
 		return
 	}
 
 	// Periksa jika model mengembalikan status code lain
 	if response.StatusCode() != http.StatusOK {
-		helper.ErrorResponse(respwd, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: "+response.String())
+		helper.ErrorResponse(respwd, request, http.StatusInternalServerError, "Internal Server Error", "kesalahan server: "+response.String())
 		return
 	}
 
@@ -67,7 +67,7 @@ func Chat(respwd http.ResponseWriter, req *http.Request, tokenmodel string) {
 	var nestedData [][]map[string]interface{}
 	err = json.Unmarshal([]byte(response.String()), &nestedData)
 	if err != nil {
-		helper.ErrorResponse(respwd, req, http.StatusInternalServerError, "Internal Server Error", "error decoding response: "+err.Error()+" | Server HF Response: "+response.String())
+		helper.ErrorResponse(respwd, request, http.StatusInternalServerError, "Internal Server Error", "error decoding response: "+err.Error()+" | Server HF Response: "+response.String())
 		return
 	}
 
@@ -96,14 +96,14 @@ func Chat(respwd http.ResponseWriter, req *http.Request, tokenmodel string) {
 
 		labelToQA, err := helper.LoadDatasetGCS(bucketName, objectName)
 		if err != nil {
-			helper.ErrorResponse(respwd, req, http.StatusInternalServerError, "Internal Server Error", "server error: could not load dataset: "+err.Error())
+			helper.ErrorResponse(respwd, request, http.StatusInternalServerError, "Internal Server Error", "server error: could not load dataset: "+err.Error())
 			return
 		}
 
 		// Get the answer corresponding to the best label
 		record, ok := labelToQA[bestLabel]
 		if !ok {
-			helper.ErrorResponse(respwd, req, http.StatusInternalServerError, "Internal Server Error", "server error: label not found in dataset")
+			helper.ErrorResponse(respwd, request, http.StatusInternalServerError, "Internal Server Error", "server error: label not found in dataset")
 			return
 		}
 
@@ -116,6 +116,6 @@ func Chat(respwd http.ResponseWriter, req *http.Request, tokenmodel string) {
 			"score":    strconv.FormatFloat(highestScore, 'f', -1, 64),
 		})
 	} else {
-		helper.ErrorResponse(respwd, req, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : response")
+		helper.ErrorResponse(respwd, request, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : response")
 	}
 }
