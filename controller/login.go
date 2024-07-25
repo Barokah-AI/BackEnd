@@ -65,7 +65,7 @@ func LogIn(db *mongo.Database, respwrt http.ResponseWriter, request *http.Reques
 	}
 
 	// response
-	resp := map[string]any{
+	response := map[string]any{
 		"status":  "success",
 		"message": "login berhasil",
 		"token":   token_string,
@@ -74,5 +74,5 @@ func LogIn(db *mongo.Database, respwrt http.ResponseWriter, request *http.Reques
 			"namalengkap": exists_doc.NamaLengkap,
 		},
 	}
-	helper.WriteJSON(respwrt, http.StatusOK, resp)
+	helper.WriteJSON(respwrt, http.StatusOK, response)
 }
