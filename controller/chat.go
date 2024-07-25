@@ -101,13 +101,13 @@ func Chat(respwd http.ResponseWriter, request *http.Request, tokenmodel string) 
 		}
 
 		// Get the answer corresponding to the best label
-		record, ok := label_to_qa[bestLabel]
+		records, ok := label_to_qa[bestLabel]
 		if !ok {
 			helper.ErrorResponse(respwd, request, http.StatusInternalServerError, "Internal Server Error", "server error: label not found in dataset")
 			return
 		}
 
-		answer := record[1]
+		answer := records[1]
 
 		helper.WriteJSON(respwd, http.StatusOK, map[string]string{
 			"prompt":   chat.Prompt,
