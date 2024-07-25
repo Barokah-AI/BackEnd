@@ -63,14 +63,14 @@ func Ngobrol(respwrt http.ResponseWriter, req *http.Request, tokenmodel string) 
 	bucket_name = config.GetEnv("GCS_BUCKET_NAME")
 	object_name := config.GetEnv("GCS_OBJECT_NAME")
 
-	label_t0_qa, err := helper.LoadDatasetGCS(bucket_name, object_name)
+	label_to_qa, err := helper.LoadDatasetGCS(bucket_name, object_name)
 	if err != nil {
 		helper.ErrorResponse(respwrt, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: tidak bisa memuat dataset: "+err.Error())
 		return
 	}
 
 	// Get the answer corresponding to the best label
-	record, ok := label_t0_qa[label]
+	record, ok := label_to_qa[label]
 	if !ok {
 		helper.ErrorResponse(respwrt, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: label tidak ditemukan dalam dataset")
 		return
