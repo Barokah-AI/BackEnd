@@ -59,3 +59,14 @@ func callHuggingFaceAPI(prompt string) (string, float64, error) {
 		return "", 0, fmt.Errorf("error decoding response: %v | Server HF Response: %s", err, responseBody)
 	}
 
+	// Flatten the nested array structure
+	var flatData []map[string]interface{}
+	for _, d := range nestedData {
+		flatData = append(flatData, d...)
+	}
+
+	// Check if the flat data has at least one element
+	if len(flatData) == 0 {
+		return "", 0, fmt.Errorf("empty response after flattening nested structure: %s", responseBody)
+	}
+
