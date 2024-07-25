@@ -80,8 +80,8 @@ func callHuggingFaceAPI(prompt string) (string, float64, error) {
 	score, ok := best_response["score"].(float64)
 	if !ok {
 		// Handle the case where the score might be an integer
-		if scoreInt, ok := best_response["score"].(int); ok {
-			score = float64(scoreInt)
+		if score_integer, ok := best_response["score"].(int); ok {
+			score = float64(score_integer)
 		} else {
 			return "", 0, fmt.Errorf("missing or invalid score in response: %s", response_body)
 		}
