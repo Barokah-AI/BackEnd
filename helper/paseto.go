@@ -18,14 +18,14 @@ type Payload struct {
 }
 
 func Encode(id primitive.ObjectID, email, privateKey string) (string, error) {
-	token := paseto.NewToken()
-	token.SetIssuedAt(time.Now())
-	token.SetNotBefore(time.Now())
-	token.SetExpiration(time.Now().Add(2 * time.Hour))
-	token.Set("id", id)
-	token.SetString("email", email)
+	tokens := paseto.NewToken()
+	tokens.SetIssuedAt(time.Now())
+	tokens.SetNotBefore(time.Now())
+	tokens.SetExpiration(time.Now().Add(2 * time.Hour))
+	tokens.Set("id", id)
+	tokens.SetString("email", email)
 	secretKey, err := paseto.NewV4AsymmetricSecretKeyFromHex(privateKey)
-	return token.V4Sign(secretKey, nil), err
+	return tokens.V4Sign(secretKey, nil), err
 }
 
 func Decode(publicKey string, tokenstring string) (payload Payload, err error) {
