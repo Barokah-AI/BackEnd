@@ -6,10 +6,10 @@ import (
 	"net/http"
 )
 
-func ErrorResponse(respw http.ResponseWriter, req *http.Request, statusCode int, error, massage string) {
+func ErrorResponse(respw http.ResponseWriter, req *http.Request, statusCode int, err, msg string) {
 	resp := map[string]string{
-		"error":   error,
-		"message": massage,
+		"error":   err,
+		"message": msg,
 	}
 	WriteJSON(respw, statusCode, resp)
 }
