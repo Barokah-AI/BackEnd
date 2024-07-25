@@ -107,11 +107,11 @@ func Chat(respwd http.ResponseWriter, request *http.Request, tokenmodel string) 
 			return
 		}
 
-		answer := records[1]
+		answers := records[1]
 
 		helper.WriteJSON(respwd, http.StatusOK, map[string]string{
 			"prompt":   chat.Prompt,
-			"response": answer,
+			"response": answers,
 			"label":    bestLabel,
 			"score":    strconv.FormatFloat(highestScore, 'f', -1, 64),
 		})
