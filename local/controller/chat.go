@@ -70,3 +70,12 @@ func callHuggingFaceAPI(prompt string) (string, float64, error) {
 		return "", 0, fmt.Errorf("empty response after flattening nested structure: %s", responseBody)
 	}
 
+	// Assume the first element contains the best response
+	bestResponse := flatData[0]
+
+	// Extract label and score from the best response
+	label, ok := bestResponse["label"].(string)
+	if !ok {
+		return "", 0, fmt.Errorf("missing or invalid label in response: %s", responseBody)
+	}
+
