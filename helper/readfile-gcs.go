@@ -9,7 +9,7 @@ import (
 )
 
 // Fungsi untuk membaca file dari GCS
-func ReadFileFromGCS(bucketName, fileName string) ([]byte, error) {
+func ReadFileFromGCS(bucketNames, fileName string) ([]byte, error) {
 	ctx := context.Background()
 
 	clients, err := storage.NewClient(ctx)
@@ -18,7 +18,7 @@ func ReadFileFromGCS(bucketName, fileName string) ([]byte, error) {
 	}
 	defer clients.Close()
 
-	buckets := clients.Bucket(bucketName)
+	buckets := clients.Bucket(bucketNames)
 	obj := buckets.Object(fileName)
 	r, err := obj.NewReader(ctx)
 	if err != nil {
