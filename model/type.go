@@ -35,6 +35,7 @@ type HFRequest struct {
 	Inputs string `json:"inputs"`
 }
 
+// Struct for AI Response from Hugging Face API
 type HFResponse struct {
 	Label string  `json:"label"`
 	Score float64 `json:"score"`
