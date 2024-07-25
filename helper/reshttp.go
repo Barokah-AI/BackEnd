@@ -6,18 +6,18 @@ import (
 	"net/http"
 )
 
-func ErrorResponse(respw http.ResponseWriter, req *http.Request, statusCode int, err, msg string) {
+func ErrorResponse(respwd http.ResponseWriter, req *http.Request, statusCode int, err, msg string) {
 	resp := map[string]string{
 		"error":   err,
 		"message": msg,
 	}
-	WriteJSON(respw, statusCode, resp)
+	WriteJSON(respwd, statusCode, resp)
 }
 
-func WriteJSON(respw http.ResponseWriter, statusCode int, content any) {
-	respw.Header().Set("Content-Type", "application/json")
-	respw.WriteHeader(statusCode)
-	respw.Write([]byte(Jsonstr(content)))
+func WriteJSON(respwd http.ResponseWriter, statusCode int, content any) {
+	respwd.Header().Set("Content-Type", "application/json")
+	respwd.WriteHeader(statusCode)
+	respwd.Write([]byte(Jsonstr(content)))
 }
 
 func Jsonstr(strc any) string {
