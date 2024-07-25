@@ -22,6 +22,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	case method == "GET" && path == "/":
 		// Call Home function
 		Home(w, r)
+		// If method is POST and path is /chat, it will run Chat function
 	case method == "POST" && path == "/chat":
 		// Call Chat function from controller package
 		controller.Chat(w, r, config.GetEnv("HUGGINGFACE_API_KEY"))
