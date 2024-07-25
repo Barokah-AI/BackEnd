@@ -34,6 +34,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	case method == "POST" && path == "/login":
 		// Call LogIn function from controller package
 		controller.LogIn(config.Mongoconn, w, r, config.GetEnv("PASETOPRIVATEKEY"))
+	// If method is POST and path is /changepassword, it will run ChangePassword function
 	default:
 		helper.ErrorResponse(w, r, http.StatusNotFound, "Not Found", "The requested resource was not found")
 	}
