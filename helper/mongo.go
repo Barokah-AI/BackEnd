@@ -34,13 +34,13 @@ func GetUserFromEmail(email string, db *mongo.Database) (doc model.User, err err
 
 func GetAllDocs[T any](db *mongo.Database, col string, filter bson.M) (docs T, err error) {
 	ctx := context.TODO()
-	collections := db.Collection(col)
-	cursors, err := collections.Find(ctx, filter)
+	collection := db.Collection(col)
+	cursor, err := collection.Find(ctx, filter)
 	if err != nil {
 		return
 	}
-	defer cursors.Close(ctx)
-	err = cursors.All(context.TODO(), &docs)
+	defer cursor.Close(ctx)
+	err = cursor.All(context.TODO(), &docs)
 	if err != nil {
 		return
 	}
@@ -48,9 +48,9 @@ func GetAllDocs[T any](db *mongo.Database, col string, filter bson.M) (docs T, e
 }
 
 func GetUserFromID(_id primitive.ObjectID, db *mongo.Database) (doc model.User, err error) {
-	collections := db.Collection("users")
+	collection := db.Collection("users")
 	filter := bson.M{"_id": _id}
-	err = collections.FindOne(context.TODO(), filter).Decode(&doc)
+	err = collection.FindOne(context.TODO(), filter).Decode(&doc)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			return doc, fmt.Errorf("no data found for ID %s", _id)
