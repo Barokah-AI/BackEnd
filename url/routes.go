@@ -18,6 +18,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	// jika method GET dan path / maka akan menjalankan fungsi Home
 	case method == "GET" && path == "/":
 		Home(w, r)
+	// jika method POST dan path /chat maka akan menjalankan fungsi Chat
 	case method == "POST" && path == "/chat":
 		controller.Chat(w, r, config.GetEnv("HUGGINGFACE_API_KEY"))
 	case method == "POST" && path == "/ngobrol":
