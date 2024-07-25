@@ -30,7 +30,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	// jika method POST dan path /login maka akan menjalankan fungsi LogIn
 	case method == "POST" && path == "/login":
 		controller.LogIn(config.Mongoconn, w, r, config.GetEnv("PASETOPRIVATEKEY"))
-	// jika method GET dan path /users maka akan menjalankan fungsi GetUsers
+	// jika path tidak ditemukan maka akan merespon dengan status 404
 	default:
 		helper.ErrorResponse(w, r, http.StatusNotFound, "Not Found", "The requested resource was not found")
 	}
