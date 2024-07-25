@@ -39,28 +39,28 @@ func callHuggingFaceAPI(prompt string) (string, float64, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		bodyBytes, _ := io.ReadAll(resp.Body)
-		return "", 0, fmt.Errorf("unexpected status code from Hugging Face API: %d | Server HF Response: %s", resp.StatusCode, string(bodyBytes))
+		body_bytes, _ := io.ReadAll(resp.Body)
+		return "", 0, fmt.Errorf("unexpected status code from Hugging Face API: %d | Server HF Response: %s", resp.StatusCode, string(body_bytes))
 	}
 
 	// Read and print the response body
-	bodyBytes, err := io.ReadAll(resp.Body)
+	body_bytes, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return "", 0, fmt.Errorf("error reading response body: %v", err)
 	}
-	response_body := string(bodyBytes)
+	response_body := string(body_bytes)
 	fmt.Println("HF API Response:", response_body) // Print the raw response
 
 	// Handle the expected nested array structure
-	var nestedData [][]map[string]interface{}
-	err = json.Unmarshal(bodyBytes, &nestedData)
+	var nested_data [][]map[string]interface{}
+	err = json.Unmarshal(body_bytes, &nested_data)
 	if err != nil {
 		return "", 0, fmt.Errorf("error decoding response: %v | Server HF Response: %s", err, response_body)
 	}
 
 	// Flatten the nested array structure
 	var flatData []map[string]interface{}
-	for _, d := range nestedData {
+	for _, d := range nested_data {
 		flatData = append(flatData, d...)
 	}
 
