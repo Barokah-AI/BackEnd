@@ -73,8 +73,8 @@ func Chat(respwd http.ResponseWriter, request *http.Request, tokenmodel string) 
 
 	// Flatten the nested array structure
 	var flat_data []map[string]interface{}
-	for _, d := range nested_data {
-		flat_data = append(flat_data, d...)
+	for _, _data := range nested_data {
+		flat_data = append(flat_data, _data...)
 	}
 
 	// Extracting the highest scoring label from the model output
