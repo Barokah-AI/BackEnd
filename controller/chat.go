@@ -79,13 +79,13 @@ func Chat(respwd http.ResponseWriter, request *http.Request, tokenmodel string) 
 
 	// Extracting the highest scoring label from the model output
 	var best_label string
-	var highestScore float64
+	var highest_score float64
 	for _, item := range flat_data {
 		label, labelOk := item["label"].(string)
 		score, scoreOk := item["score"].(float64)
-		if labelOk && scoreOk && (best_label == "" || score > highestScore) {
+		if labelOk && scoreOk && (best_label == "" || score > highest_score) {
 			best_label = label
-			highestScore = score
+			highest_score = score
 		}
 	}
 
@@ -113,7 +113,7 @@ func Chat(respwd http.ResponseWriter, request *http.Request, tokenmodel string) 
 			"prompt":   chat.Prompt,
 			"response": answers,
 			"label":    best_label,
-			"score":    strconv.FormatFloat(highestScore, 'f', -1, 64),
+			"score":    strconv.FormatFloat(highest_score, 'f', -1, 64),
 		})
 	} else {
 		helper.ErrorResponse(respwd, request, http.StatusInternalServerError, "Internal Server Error", "kesalahan server : response")
