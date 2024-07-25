@@ -24,6 +24,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	// jika method POST dan path /ngobrol maka akan menjalankan fungsi Ngobrol
 	case method == "POST" && path == "/ngobrol":
 		controller.Ngobrol(w, r, config.GetEnv("HUGGINGFACE_API_KEY"))
+	// jika method POST dan path /signup maka akan menjalankan fungsi SignUp
 	case method == "POST" && path == "/signup":
 		controller.SignUp(config.Mongoconn, "users", w, r)
 	case method == "POST" && path == "/login":
