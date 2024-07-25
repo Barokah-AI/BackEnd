@@ -90,7 +90,7 @@ func callHuggingFaceAPI(prompt string) (string, float64, error) {
 	return label, score, nil
 }
 
-func Chat(respwrt http.ResponseWriter, req *http.Request, tokenmodel string) {
+func Chat(respwrt http.ResponseWriter, req *http.Request, token_model string) {
 	var chat model.AIRequest
 
 	err := json.NewDecoder(req.Body).Decode(&chat)
