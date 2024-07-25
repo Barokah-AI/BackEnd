@@ -12,7 +12,6 @@ require (
 require (
 	aidanwoods.dev/go-paseto v1.5.1
 	github.com/badoux/checkmail v1.2.4
-	github.com/joho/godotenv v1.5.1
 	go.mongodb.org/mongo-driver v1.16.0
 	golang.org/x/crypto v0.23.0
 )
