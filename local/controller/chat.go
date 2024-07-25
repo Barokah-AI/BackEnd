@@ -6,8 +6,11 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
+	"strings"
 
 	"github.com/Barokah-AI/BackEnd/config"
+	"github.com/Barokah-AI/BackEnd/helper"
 	"github.com/Barokah-AI/BackEnd/model"
 )
 
@@ -135,3 +138,37 @@ func Chat(respw http.ResponseWriter, req *http.Request, tokenmodel string) {
 		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "error saat melakukan tokenisasi: "+err.Error())
 		return
 	}
+
+	// Convert tokens to string for API call
+	tokensStr := strings.Trim(strings.Join(strings.Fields(fmt.Sprint(tokens)), " "), "[]")
+
+	// Call Hugging Face API with tokenized prompt
+	label, score, err := callHuggingFaceAPI(tokensStr)
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "model sedang diload: "+err.Error())
+		return
+	}
+
+	// Load the dataset
+	datasetPath := ("../dataset/barokah.csv")
+	labelToQA, err := helper.LoadDatasetLocal(datasetPath)
+	if err != nil {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: tidak bisa memuat dataset: "+err.Error())
+		return
+	}
+
+	record, ok := labelToQA[label]
+	if !ok {
+		helper.ErrorResponse(respw, req, http.StatusInternalServerError, "Kesalahan Server Internal", "kesalahan server: label tidak ditemukan dalam dataset")
+		return
+	}
+
+	answer := record[1]
+
+	helper.WriteJSON(respw, http.StatusOK, map[string]string{
+		"prompt":   chat.Prompt,
+		"response": answer,
+		"label":    label,
+		"score":    strconv.FormatFloat(score, 'f', -1, 64),
+	})
+}
