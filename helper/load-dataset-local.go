@@ -20,7 +20,7 @@ func LoadDatasetLocal(file_path string) (map[string][]string, error) {
 	reader.Comma = '|' // Set the delimiter to pipe
 	records, err := reader.ReadAll()
 	if err != nil {
-		return nil, fmt.Errorf("failed to read dataset file: %v", err)
+		return nil, fmt.Errorf("gagal dalam membaca dataset: %v", err)
 	}
 
 	labelToQA := make(map[string][]string)
