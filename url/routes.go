@@ -15,6 +15,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 
 	var method, path string = r.Method, r.URL.Path
 	switch {
+	// jika method GET dan path / maka akan menjalankan fungsi Home
 	case method == "GET" && path == "/":
 		Home(w, r)
 	case method == "POST" && path == "/chat":
