@@ -15,7 +15,7 @@ import (
 )
 
 func callHuggingFaceAPI(prompt string) (string, float64, error) {
-	apiUrl := config.GetEnv("HUGGINGFACE_API_URL")
+	api_url := config.GetEnv("HUGGINGFACE_API_URL")
 	api_token := "Bearer " + config.GetEnv("HUGGINGFACE_API_KEY")
 
 	req_body := model.HFRequest{Inputs: prompt}
@@ -24,7 +24,7 @@ func callHuggingFaceAPI(prompt string) (string, float64, error) {
 		return "", 0, fmt.Errorf("error marshalling request body: %v", err)
 	}
 
-	req, err := http.NewRequest("POST", apiUrl, bytes.NewBuffer(json_req_body))
+	req, err := http.NewRequest("POST", api_url, bytes.NewBuffer(json_req_body))
 	if err != nil {
 		return "", 0, fmt.Errorf("error creating request: %v", err)
 	}
