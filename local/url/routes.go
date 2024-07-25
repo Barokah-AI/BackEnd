@@ -30,6 +30,7 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	case method == "POST" && path == "/signup":
 		// Call SignUp function from controller package
 		controller.SignUp(config.Mongoconn, "users", w, r)
+	// If method is POST and path is /login, it will run LogIn function
 	case method == "POST" && path == "/login":
 		controller.LogIn(config.Mongoconn, w, r, config.GetEnv("PASETOPRIVATEKEY"))
 	default:
