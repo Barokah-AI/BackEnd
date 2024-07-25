@@ -24,13 +24,13 @@ func LoadDatasetGCS(bucketName, objectName string) (map[string][]string, error) 
 	}
 
 	labelToQA := make(map[string][]string)
-	for i, record := range records {
-		if len(record) != 2 {
-			log.Printf("Skipping invalid record at line %d: %v\n", i+1, record)
+	for i, rec := range records {
+		if len(rec) != 2 {
+			log.Printf("Skipping invalid record at line %d: %v\n", i+1, rec)
 			continue
 		}
 		label := "LABEL_" + strconv.Itoa(i)
-		labelToQA[label] = record
+		labelToQA[label] = rec
 	}
 	return labelToQA, nil
 }
