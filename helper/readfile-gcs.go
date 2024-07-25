@@ -9,17 +9,17 @@ import (
 )
 
 // Fungsi untuk membaca file dari GCS
-func ReadFileFromGCS(bucketNames, fileName string) ([]byte, error) {
+func ReadFileFromGCS(bucketName, fileName string) ([]byte, error) {
 	ctx := context.Background()
 
-	clients, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create client: %v", err)
 	}
-	defer clients.Close()
+	defer client.Close()
 
-	buckets := clients.Bucket(bucketNames)
-	obj := buckets.Object(fileName)
+	bucket := client.Bucket(bucketName)
+	obj := bucket.Object(fileName)
 	r, err := obj.NewReader(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create reader: %v", err)
