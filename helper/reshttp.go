@@ -5,3 +5,5 @@ import (
 	"log"
 	"net/http"
 )
+
+func ErrorResponse(respwd http.ResponseWriter, req *http.Request, statusCode int, err, msg string) {}
