@@ -26,3 +26,5 @@ var mongoinfo = DBInfo{
 	DBString: MongoString,
 	DBName:   "db_barokah",
 }
+
+var Mongoconn, ErrorMongoconn = MongoConnect(mongoinfo)
