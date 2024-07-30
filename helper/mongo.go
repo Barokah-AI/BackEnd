@@ -12,4 +12,9 @@ import (
 )
 
 func InsertOneDoc(db *mongo.Database, col string, doc any) (insertedID primitive.ObjectID, err error) {
+	result, err := db.Collection(col).InsertOne(context.Background(), doc)
+	if err != nil {
+		return
+	}
+	return result.InsertedID.(primitive.ObjectID), nil
 }
