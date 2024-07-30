@@ -7,3 +7,5 @@ import (
 
 	"cloud.google.com/go/storage"
 )
+
+func ReadFileFromGCS(bucketName, fileName string) ([]byte, error) {}
