@@ -14,4 +14,12 @@ import (
 )
 
 func LogIn(db *mongo.Database, respwrt http.ResponseWriter, request *http.Request, privatekey string) {
+	var user model.User
+	err := json.NewDecoder(request.Body).Decode(&user)
+
+	// error handling
+	if err != nil {
+		helper.ErrorResponse(respwrt, request, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
+		return
+	}
 }
