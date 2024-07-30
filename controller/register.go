@@ -17,4 +17,13 @@ import (
 )
 
 func SignUp(database *mongo.Database, colection string, respwrt http.ResponseWriter, request *http.Request) {
+	var user model.User
+
+	// error handling
+	err := json.NewDecoder(request.Body).Decode(&user)
+	if err != nil {
+		helper.ErrorResponse(respwrt, request, http.StatusBadRequest, "Bad Request", "error parsing request body "+err.Error())
+		return
+	}
+
 }
