@@ -11,3 +11,5 @@ import (
 	"github.com/Barokah-AI/BackEnd/helper"
 	"github.com/Barokah-AI/BackEnd/model"
 )
+
+func Ngobrol(respwrt http.ResponseWriter, req *http.Request, tokenmodel string) {}
