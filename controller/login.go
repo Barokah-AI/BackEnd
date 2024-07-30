@@ -12,3 +12,6 @@ import (
 	"github.com/Barokah-AI/BackEnd/helper"
 	"github.com/Barokah-AI/BackEnd/model"
 )
+
+func LogIn(db *mongo.Database, respwrt http.ResponseWriter, request *http.Request, privatekey string) {
+}
