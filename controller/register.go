@@ -15,3 +15,6 @@ import (
 	"github.com/Barokah-AI/BackEnd/helper"
 	"github.com/Barokah-AI/BackEnd/model"
 )
+
+func SignUp(database *mongo.Database, colection string, respwrt http.ResponseWriter, request *http.Request) {
+}
