@@ -19,3 +19,11 @@ func WriteJSON(respwd http.ResponseWriter, statusCode int, content any) {
 	respwd.WriteHeader(statusCode)
 	respwd.Write([]byte(Jsonstr(content)))
 }
+
+func Jsonstr(strc any) string {
+	json_data, err := json.Marshal(strc)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return string(json_data)
+}
