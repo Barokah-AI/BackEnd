@@ -11,3 +11,5 @@ import (
 	"github.com/Barokah-AI/BackEnd/model"
 	"github.com/go-resty/resty/v2"
 )
+
+func Chat(respwd http.ResponseWriter, request *http.Request, tokenmodel string) {}
